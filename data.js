@@ -273,10 +273,6 @@ const DATA = [
      [
       "www.youtube.com/@SOUND_360",
       "www.instagram.com/sound360.distribution/"
-     ],
-     [
-      "",
-      ""
      ]
     ],
     "text": ""

@@ -17,7 +17,7 @@ function renderItem(x){
  if(x.type==='table'){
   if(x.rows.length===1&&x.rows[0].length===1)return `<pre class="example">${esc(x.rows[0][0])}</pre>`;
   const [head,...body]=x.rows;
-  return `<div class="table-wrap"><table><thead><tr>${head.map(c=>`<th>${linkText(c)}</th>`).join('')}</tr></thead><tbody>${body.map(r=>'<tr>'+r.map(c=>`<td>${linkText(c)}</td>`).join('')+'</tr>').join('')}</tbody></table></div>`;
+  return `<div class="table-wrap"><table${head[0]==='구분'?' class="label-first"':''}><thead><tr>${head.map(c=>`<th>${linkText(c)}</th>`).join('')}</tr></thead><tbody>${body.map(r=>'<tr>'+r.map(c=>`<td>${linkText(c)}</td>`).join('')+'</tr>').join('')}</tbody></table></div>`;
  }
  return `<p>${linkText(x.text)}</p>`;
 }
