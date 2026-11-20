@@ -74,7 +74,10 @@ function renderCredits(isGenre=false){let source=isGenre?GENRES:CONTRIBUTORS.fil
 const dialog=document.querySelector('#searchDialog'),input=document.querySelector('#searchInput'),results=document.querySelector('#searchResults');
 function search(){let q=input.value.trim().toLowerCase();if(!q){results.innerHTML='<div class="hint">검색어를 입력해 주세요.</div>';return}let found=[];for(const [id,label] of navs){if(id==='home')continue;for(const item of getItems(id)){let text=itemText(item);if(text.toLowerCase().includes(q)){found.push({id,label,text:text.slice(0,130)});if(found.length>=30)break}}}results.innerHTML=found.map(x=>`<a href="#${x.id}"><b>${esc(x.label)}</b><small>${esc(x.text)}</small></a>`).join('')||'<p class="hint">검색 결과가 없습니다.</p>';results.querySelectorAll('a').forEach(a=>a.onclick=()=>dialog.close())}
 const openSearch=()=>{if(!dialog.open){dialog.showModal();input.focus();search()}};
-document.querySelector('#searchButton').onclick=openSearch;document.querySelector('#closeSearch').onclick=()=>dialog.close();input.oninput=search;
+document.querySelector('#searchButton').onclick=openSearch;document.querySelector('#closeSearch').onclick=()=>dialog.close();
+// dialog has no padding, so only the backdrop targets it; also require the press to start there, so a text drag ending outside doesn't close it
+let pressedOn=null;dialog.addEventListener('pointerdown',e=>pressedOn=e.target);
+dialog.addEventListener('click',e=>{if(e.target===dialog&&pressedOn===dialog)dialog.close()});input.oninput=search;
 document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch()}if(e.key==='Escape')sidebar.classList.remove('open')});
 document.querySelector('#menuButton').onclick=()=>{let open=sidebar.classList.toggle('open');document.querySelector('#menuButton').setAttribute('aria-expanded',open)};
 document.addEventListener('click',e=>{if(!sidebar.contains(e.target)&&!e.target.closest('#menuButton'))sidebar.classList.remove('open')});
