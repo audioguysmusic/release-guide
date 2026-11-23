@@ -111,15 +111,37 @@ function render(){
  const title=navs.find(n=>n[0]===id)[1], items=getItems(id);
  const first=items.findIndex(x=>x.type==='h'&&x.level===2), intro=first<0?items:items.slice(0,first), rest=first<0?[]:items.slice(first);
  const extra=id==='genres'?`<section class="tool"><p>영문 장르명이나 한글 키워드로 검색해 주세요.</p><input class="credit-search" id="creditSearch" placeholder="장르 검색" aria-label="장르 검색"><div class="credit-list" id="creditList"></div></section>`
-  :id==='credits'?`<section class="tool"><h2>역할과 악기 찾아보기</h2><p>발매 크레딧에 사용할 역할 또는 악기를 검색해 주세요. 항목을 누르면 영문명이 복사됩니다.</p><div class="credit-controls"><button data-kind="Roles" class="active" aria-pressed="true">역할 Roles</button><button data-kind="Instrument" aria-pressed="false">악기 Instrument</button></div><input class="credit-search" id="creditSearch" placeholder="역할명 또는 한글 키워드" aria-label="크레딧 검색"><div class="hint">원문에 제공된 항목 목록입니다. 최종 등록 가능 여부는 담당자에게 확인해 주세요.</div><div class="credit-list" id="creditList"></div></section>`:'';
- main.innerHTML=`<a href="#home" class="back-link"><i class="ph ph-arrow-left" aria-hidden="true"></i>처음으로</a><article class="article"><h1 tabindex="-1">${esc(title)}</h1>${intro.length?`<div class="intro">${intro.map(renderItem).join('')}</div>`:''}${facts[id]?`<section class="key-facts"><h2>핵심 요약</h2><ul>${facts[id].map(f=>`<li>${linkText(f)}</li>`).join('')}</ul></section>`:''}${extra}${id==='glossary'?renderGlossary(rest):id==='faq'?renderFaq():renderSections(rest)}</article>`;
+  :id==='credits'?`<section class="tool"><h2>역할과 악기 찾아보기</h2><p>발매 크레딧에 사용할 역할 또는 악기를 검색해 주세요. 항목을 누르면 영문명이 복사됩니다.</p><div class="credit-controls"><button data-kind="Roles" class="active" aria-pressed="true">역할 Roles</button><button data-kind="Instrument" aria-pressed="false">악기 Instrument</button></div><input class="credit-search" id="creditSearch" placeholder="역할명 또는 한글 키워드" aria-label="크레딧 검색"><div class="hint">원문에 제공된 항목 목록입니다. 최종 등록 가능 여부는 담당자에게 확인해 주세요.</div><p class="cross-hint" id="creditHint" hidden></p><div class="credit-list" id="creditList"></div><button type="button" class="more-btn" id="creditMore" hidden></button></section>`:'';
+ main.innerHTML=`<a href="#home" class="back-link"><i class="ph ph-arrow-left" aria-hidden="true"></i>처음으로</a><article class="article"><h1 tabindex="-1">${esc(title)}</h1>${intro.length?`<div class="intro">${intro.map(renderItem).join('')}</div>`:''}${facts[id]?`<section class="key-facts"><h2>핵심 요약</h2><ul>${facts[id].map(f=>`<li>${linkText(f)}</li>`).join('')}</ul></section>`:''}${id==='credits'?'':extra}${id==='glossary'?renderGlossary(rest):id==='faq'?renderFaq():renderSections(rest)}${id==='credits'?extra:''}</article>`;
  if(id==='genres'){document.querySelector('#creditSearch').oninput=()=>renderCredits(true);renderCredits(true)}
- if(id==='credits'){creditType='Roles';document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{creditType=b.dataset.kind;document.querySelectorAll('[data-kind]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',x===b)});renderCredits()});document.querySelector('#creditSearch').oninput=()=>renderCredits(false);renderCredits()}
+ // credits: the short guidance comes first so the long lookup list below can't bury it
+ if(id==='credits'){creditType='Roles';creditsExpanded=false;document.querySelector('#creditMore').onclick=()=>{creditsExpanded=!creditsExpanded;renderCredits()};document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{creditType=b.dataset.kind;creditsExpanded=false;document.querySelectorAll('[data-kind]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',x===b)});renderCredits()});document.querySelector('#creditSearch').oninput=()=>renderCredits(false);renderCredits()}
  window.scrollTo(0,0);main.querySelector('h1').focus({preventScroll:true});
  const target=id==='faq'&&document.getElementById(hash);
- if(target){showOpen(target);target.scrollIntoView()}else if(id!=='faq')showOpen(main.querySelector('.guide-accordion'));
+ if(target){showOpen(target);target.scrollIntoView()}else if(id!=='faq'&&id!=='credits')showOpen(main.querySelector('.guide-accordion'));
 }
-function renderCredits(isGenre=false){let source=isGenre?GENRES:CONTRIBUTORS.filter(x=>x.type===(creditType==='Roles'?'role':'instrument'));let q=document.querySelector('#creditSearch').value.trim().normalize('NFC').toLowerCase();let filtered=source.filter(x=>String(x.active).toUpperCase()==='TRUE'&&[x.display_name,x.search_keywords_ko,x.search_keywords_en||''].some(t=>String(t||'').normalize('NFC').toLowerCase().includes(q))).sort((a,b)=>Number(a.sort_order)-Number(b.sort_order));let target=document.querySelector('#creditList');target.innerHTML=filtered.map(x=>`<button class="credit-item" data-copy="${esc(x.display_name)}">${esc(x.display_name)}</button>`).join('')||'<p class="hint">검색 결과가 없습니다.</p>';}
+// Credits lists are long (hundreds of items), so with no search only a faded preview shows and the guidance below stays in reach.
+const CREDIT_PREVIEW=12;let creditsExpanded=false;
+const creditMatches=(source,q)=>source.filter(x=>String(x.active).toUpperCase()==='TRUE'&&[x.display_name,x.search_keywords_ko,x.search_keywords_en||''].some(t=>String(t||'').normalize('NFC').toLowerCase().includes(q))).sort((a,b)=>Number(a.sort_order)-Number(b.sort_order));
+function renderCredits(isGenre=false){
+ const kind=creditType==='Roles'?'role':'instrument',q=document.querySelector('#creditSearch').value.trim().normalize('NFC').toLowerCase();
+ const filtered=creditMatches(isGenre?GENRES:CONTRIBUTORS.filter(x=>x.type===kind),q);
+ const target=document.querySelector('#creditList'),more=document.querySelector('#creditMore'),hint=document.querySelector('#creditHint');
+ const collapse=!isGenre&&!q&&!creditsExpanded&&filtered.length>CREDIT_PREVIEW;
+ target.innerHTML=(collapse?filtered.slice(0,CREDIT_PREVIEW):filtered).map(x=>`<button class="credit-item" data-copy="${esc(x.display_name)}">${esc(x.display_name)}</button>`).join('')||'<p class="hint">검색 결과가 없습니다.</p>';
+ target.classList.toggle('is-collapsed',collapse);
+ if(isGenre)return;
+ more.hidden=!!q||filtered.length<=CREDIT_PREVIEW;
+ more.innerHTML=creditsExpanded?'접기<i class="ph ph-caret-up" aria-hidden="true"></i>':`전체 ${filtered.length}개 보기<i class="ph ph-caret-down" aria-hidden="true"></i>`;
+ more.setAttribute('aria-expanded',creditsExpanded);
+ // point to the other tab when it has matches the current one doesn't show
+ const otherKind=kind==='role'?'instrument':'role',otherLabel=otherKind==='role'?'역할':'악기',otherCount=q?creditMatches(CONTRIBUTORS.filter(x=>x.type===otherKind),q).length:0;
+ hint.hidden=!otherCount;
+ if(otherCount)hint.innerHTML=`<span>${filtered.length?'':'이 탭에는 결과가 없어요. '}<b>${otherLabel}</b>에서 ${otherCount}개를 찾았어요.</span><button type="button" class="text-link" data-switch="${otherKind==='role'?'Roles':'Instrument'}">${otherLabel}에서 보기<i class="ph ph-arrow-right" aria-hidden="true"></i></button>`;
+ hint.classList.toggle('is-empty',!filtered.length);
+ if(otherCount&&!filtered.length)target.innerHTML=''; // the hint already says this tab is empty
+ hint.querySelector('[data-switch]')?.addEventListener('click',e=>document.querySelector(`[data-kind="${e.currentTarget.dataset.switch}"]`).click());
+}
 main.addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;try{await navigator.clipboard.writeText(b.dataset.copy);const ico=b.querySelector('.ph-copy');if(ico){ico.classList.replace('ph-copy','ph-check');setTimeout(()=>ico.classList.replace('ph-check','ph-copy'),1500)}let t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent='복사했습니다';document.body.append(t);setTimeout(()=>t.remove(),1800)}catch{alert('복사할 수 없습니다. 항목을 직접 선택해 주세요.')}});
 
 const dialog=document.querySelector('#searchDialog'),input=document.querySelector('#searchInput'),results=document.querySelector('#searchResults');
