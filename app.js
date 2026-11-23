@@ -52,10 +52,11 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)'),DUR=320,easeOut=p=>1
 function setOpen(d,open){
  const from=d.offsetHeight;d._anim?.cancel();d.open=true;d.classList.toggle('is-open',open);
  const to=open?d.offsetHeight:d.querySelector('summary').offsetHeight;
- if(reduce.matches){d.open=open;return}
+ if(reduce.matches){d.open=open;return null}
  d.style.overflow='clip';
  const a=d._anim=d.animate({height:[from+'px',to+'px']},{duration:DUR,easing:'cubic-bezier(.2,0,0,1)',fill:'forwards'});
  a.onfinish=()=>{d.open=open;d.style.overflow='';a.cancel()};
+ return a;
 }
 const showOpen=d=>{if(d){d.open=true;d.classList.add('is-open')}};
 main.addEventListener('click',e=>{
@@ -63,19 +64,44 @@ main.addEventListener('click',e=>{
  e.preventDefault();
  const d=s.parentElement,open=!d.classList.contains('is-open');
  if(open)main.querySelectorAll('.guide-accordion.is-open').forEach(o=>o!==d&&setOpen(o,false));
- setOpen(d,open);
- // Opening glides the title up under the header; closing holds it still while sections above shrink.
- const v0=s.getBoundingClientRect().top,v1=open?document.querySelector('header').offsetHeight+12:v0,t0=performance.now(),dur=reduce.matches?0:DUR;
- const step=now=>{const p=dur?Math.min(1,(now-t0)/dur):1;scrollBy(0,s.getBoundingClientRect().top-(v0+(v1-v0)*easeOut(p)));if(p<1)requestAnimationFrame(step)};
- requestAnimationFrame(step);
+ const anim=setOpen(d,open);
+ // Hold the title still while sections resize; once an opened one has its full height, bring its start under the header.
+ // The hold must stop before the scroll starts: any scrollBy would cancel the smooth scroll.
+ const v0=s.getBoundingClientRect().top;let settled=!anim;
+ const hold=()=>{if(settled)return;scrollBy(0,s.getBoundingClientRect().top-v0);requestAnimationFrame(hold)};
+ requestAnimationFrame(hold);
+ (anim?anim.finished:Promise.resolve()).then(()=>{settled=true;if(open)s.scrollIntoView({block:'start',behavior:reduce.matches?'auto':'smooth'})},()=>{settled=true});
 });
 
-const home=`<section class="hero"><h1 tabindex="-1">음악이 세상에 닿기까지,<br>함께 준비해요.</h1></section><nav class="topic-grid" aria-label="가이드 주제">${navs.slice(1).map(([id,title,icon],i)=>`<a class="topic-link" href="#${id}"><i class="ph ph-${icon} topic-ico" style="--i:${i}" aria-hidden="true"></i><span class="topic-text"><b>${title}</b><small>${descriptions[id]}</small></span><i class="ph ph-arrow-right topic-arrow" aria-hidden="true"></i></a>`).join('')}</nav><footer class="home-footer"><span>© AUDIOGUY</span><a href="https://audioguy2026.vercel.app/" target="_blank" rel="noopener">공식 웹사이트</a><a href="https://www.youtube.com/@SOUND_360" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/sound360.distribution/" target="_blank" rel="noopener">Instagram</a></footer>`;
+// Hero lines rotate every 10s; each change scrambles through glyphs (with a light blur) before settling.
+const HEROES=[['음악이 세상에 닿기까지,','함께 준비해요.'],['첫 발매부터 첫 정산까지,','함께 준비해요.'],['음악은 당신이 만들고,','나머지는 함께해요.'],['좋은 음악이 더 멀리 가도록,','곁에서 준비해요.'],['작업실에서 플레이리스트까지,','함께 걸어요.'],['음악이 공간을 채우기까지,','함께 준비해요.'],['모든 음악을 공간음향으로,','그리고 세상으로.'],['더 넓게 들리는 음악으로,','세상에 내보내요.'],['발매에 필요한 모든 것,','여기서 확인하세요.'],['당신의 다음 발매,','여기서 시작해요.']];
+const GLYPHS='#%&*+=/<>░▒▓◆◇○●가나다라마바사';
+let heroIndex=0,heroTimer=0;
+const heroHTML=lines=>lines.map(l=>`<span class="hero-line">${l}</span>`).join('');
+function scrambleHero(h1,lines){
+ h1.setAttribute('aria-label',lines.join(' '));
+ const out=h1.querySelector('.hero-text');
+ if(reduce.matches){out.innerHTML=heroHTML(lines.map(esc));return}
+ const D=400,t0=performance.now();
+ // each character settles at its own moment, roughly left to right
+ const at=lines.map(l=>[...l].map((_,i,arr)=>D*(.15+.6*i/arr.length+.25*Math.random())));
+ h1.classList.add('scrambling');
+ const tick=now=>{
+  if(!out.isConnected)return;
+  const t=now-t0;
+  out.innerHTML=heroHTML(lines.map((l,j)=>[...l].map((c,i)=>c===' '||t>=at[j][i]?esc(c):`<span class="glyph">${esc(GLYPHS[Math.random()*GLYPHS.length|0])}</span>`).join('')));
+  if(t<D)requestAnimationFrame(tick);else h1.classList.remove('scrambling');
+ };
+ requestAnimationFrame(tick);
+}
+const home=`<section class="hero"><h1 tabindex="-1" aria-label="${HEROES[0].join(' ')}"><span class="hero-text" aria-hidden="true">${heroHTML(HEROES[0])}</span></h1></section><nav class="topic-grid" aria-label="가이드 주제">${navs.slice(1).map(([id,title,icon],i)=>`<a class="topic-link" href="#${id}"><i class="ph ph-${icon} topic-ico" style="--i:${i}" aria-hidden="true"></i><span class="topic-text"><b>${title}</b><small>${descriptions[id]}</small></span><i class="ph ph-arrow-right topic-arrow" aria-hidden="true"></i></a>`).join('')}</nav><footer class="home-footer"><span>© AUDIOGUY</span><a href="https://audioguy2026.vercel.app/" target="_blank" rel="noopener">공식 웹사이트</a><a href="https://www.youtube.com/@SOUND_360" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/sound360.distribution/" target="_blank" rel="noopener">Instagram</a></footer>`;
 
 function render(){
  const hash=location.hash.slice(1)||'home';let id=hash.startsWith('faq-')?'faq':hash;if(!navs.some(n=>n[0]===id))id='home';
  navRender(id);setMenu(false);document.body.classList.toggle('is-home',id==='home');
- if(id==='home'){main.innerHTML=home;window.scrollTo(0,0);main.querySelector('h1').focus({preventScroll:true});return}
+ clearInterval(heroTimer);
+ if(id==='home'){main.innerHTML=home;heroIndex=0;window.scrollTo(0,0);main.querySelector('h1').focus({preventScroll:true});
+  heroTimer=setInterval(()=>{const h=main.querySelector('.hero h1');if(h)scrambleHero(h,HEROES[heroIndex=(heroIndex+1)%HEROES.length])},10000);return}
  const title=navs.find(n=>n[0]===id)[1], items=getItems(id);
  const first=items.findIndex(x=>x.type==='h'&&x.level===2), intro=first<0?items:items.slice(0,first), rest=first<0?[]:items.slice(first);
  const extra=id==='genres'?`<section class="tool"><p>영문 장르명이나 한글 키워드로 검색해 주세요.</p><input class="credit-search" id="creditSearch" placeholder="장르 검색" aria-label="장르 검색"><div class="credit-list" id="creditList"></div></section>`
@@ -104,6 +130,24 @@ menuButton.onclick=()=>setMenu(!sidebar.classList.contains('open'));
 document.addEventListener('click',e=>{if(!sidebar.contains(e.target)&&!e.target.closest('#menuButton'))setMenu(false)});
 
 let previousId=location.hash.slice(1)||'home';
+// Home → topic, as a short loading beat: the tile grows into a frosted veil while its icon glides to the centre (0.5s),
+// the page renders underneath while the icon plays its own motion, then the veil fades away.
+main.addEventListener('click',e=>{
+ const a=e.target.closest('.topic-link');if(!a||reduce.matches||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+ e.preventDefault();
+ const r=a.getBoundingClientRect(),ico=a.querySelector('.topic-ico'),ir=ico.getBoundingClientRect(),vw=innerWidth,vh=innerHeight,ease='cubic-bezier(.2,0,0,1)';
+ const veil=document.createElement('div'),wrap=document.createElement('span'),glyph=document.createElement('i');
+ veil.className='veil';wrap.className='veil-ico';wrap.style.cssText=`left:${ir.left}px;top:${ir.top}px`;
+ glyph.className=ico.className.replace(' topic-ico','');glyph.setAttribute('aria-hidden','true');
+ wrap.append(glyph);veil.append(wrap);document.body.append(veil);
+ veil.animate({clipPath:[`inset(${r.top}px ${vw-r.right}px ${vh-r.bottom}px ${r.left}px)`,'inset(0px 0px 0px 0px)'],opacity:[.6,1]},{duration:500,easing:ease,fill:'forwards'});
+ // the wrapper moves and scales; the glyph inside is free to run its hover motion without fighting that transform
+ wrap.animate({transform:['none',`translate(${vw/2-ir.left-ir.width/2}px,${vh/2-ir.top-ir.height/2}px) scale(2.6)`]},{duration:500,easing:ease,fill:'forwards'}).finished.then(()=>{
+  const href=a.getAttribute('href');history.pushState(null,'',href);render();previousId=href.slice(1);
+  glyph.classList.add('play');
+  setTimeout(()=>veil.animate({opacity:[1,0]},{duration:350,easing:'ease-out',fill:'forwards'}).finished.then(()=>veil.remove()),600);
+ });
+});
 window.addEventListener('hashchange',()=>{
  const nextId=location.hash.slice(1)||'home';
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;

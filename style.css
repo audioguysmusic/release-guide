@@ -1,5 +1,9 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
 
+/* Logo face: Recital Trial Regular (Display serif). shortcut: only local() for now, so visitors without it installed see Georgia;
+   put a licensed web file at fonts/Recital-Regular.woff2 and add url('fonts/Recital-Regular.woff2') to src to ship it. */
+@font-face{font-family:'Recital';font-weight:400;font-display:swap;src:local('Recital Trial Regular'),local('RecitalTrial-Regular'),local('Recital Display Regular'),local('Recital Regular'),local('Recital-Regular')}
+
 :root{
   --bg:#fafafa;--surface:#fff;--raised:#f4f4f5;--well:#efeff0;
   --line:rgba(23,23,23,.08);--line-strong:rgba(23,23,23,.16);
@@ -7,7 +11,7 @@
   --accent:#4fe699;--accent-ink:#1a7650;
   --ease:cubic-bezier(.22,1,.36,1);--header:64px;
   --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
-  --font-serif:Georgia,'Times New Roman',serif; /* shortcut: system serif until the company serif is named, swap it here */
+  --font-serif:'Recital',Georgia,'Times New Roman',serif;
   /* Type scale: every text role maps to one of these. Mobile overrides at the bottom. */
   --fs-display:44px;--fs-h1:32px;--fs-h2:20px;--fs-h3:17px;--fs-lead:17px;--fs-body:16px;--fs-ui:14px;--fs-meta:13px;--fs-micro:12px;
   --lh-tight:1.25;--lh-head:1.45;--lh-body:1.75;--lh-ui:1.5;
@@ -32,7 +36,7 @@ h1:focus{outline:none}
 /* Header */
 header{position:sticky;top:0;z-index:10;height:var(--header);display:flex;align-items:center;gap:16px;padding:0 24px;background:rgba(250,250,250,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:12px;white-space:nowrap}
-.brand b{font-size:18px;font-weight:600}
+.brand b{font-size:18px}
 .brand span{padding-left:12px;border-left:1px solid var(--line-strong);color:var(--text-2);font-size:var(--fs-ui);font-weight:500}
 .header-right{margin-left:auto;display:flex;align-items:center;gap:8px}
 .search-trigger{display:flex;align-items:center;gap:8px;width:240px;height:36px;padding:0 8px 0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);font-size:var(--fs-ui);transition:border-color .15s var(--ease)}
@@ -40,7 +44,7 @@ header{position:sticky;top:0;z-index:10;height:var(--header);display:flex;align-
 kbd{margin-left:auto;padding:4px 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--bg);color:var(--muted);font:500 var(--fs-micro)/1 var(--mono)}
 .contact{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:8px;background:var(--text);color:#fff;font-size:var(--fs-ui);font-weight:500;white-space:nowrap;transition:background-color .15s var(--ease)}
 .contact:hover{background:#3a3a3a}
-.mobile-menu{display:none;width:40px;height:40px;align-items:center;justify-content:center;border-radius:8px}
+.mobile-menu{display:none;width:40px;height:40px;align-items:center;justify-content:center;border-radius:8px;overflow:hidden}
 .burger{position:relative;width:18px;height:12px}
 .burger span{position:absolute;left:0;width:100%;height:1.5px;border-radius:1px;background:currentColor;transition:transform .25s var(--ease),opacity .2s var(--ease)}
 .burger span:nth-child(2){top:5.25px}.burger span:nth-child(3){top:10.5px}
@@ -62,12 +66,16 @@ aside{width:256px;flex:none;position:sticky;top:var(--header);height:calc(100dvh
 .side-footer span{width:100%}
 .side-footer a:hover,.home-footer a:hover{color:var(--text)}
 main{flex:1;min-width:0;padding:var(--section) var(--gutter) 96px}
-.is-home aside,.is-home .mobile-menu{display:none!important}
+.is-home aside{display:none!important}
 .is-home main{max-width:1040px;margin:0 auto;padding:64px var(--gutter) 96px}
 
 /* Home */
 .hero{padding:16px 0 48px;border-bottom:1px solid var(--text)}
-.hero h1{font-size:var(--fs-display);line-height:1.2;font-weight:600;letter-spacing:-.02em}
+.hero h1{font-size:var(--fs-display);line-height:1.2;font-weight:600;letter-spacing:-.02em;min-height:2.4em;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-line{display:block}
+.hero h1 .glyph{color:var(--muted);font-weight:400}
+.hero h1{transition:filter .2s var(--ease)}
+.hero h1.scrambling{filter:blur(1.5px)}
 .topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
 .topic-link{display:flex;align-items:center;gap:16px;min-height:88px;padding:16px 8px;border-bottom:1px solid var(--line);transition:background-color .15s var(--ease)}
 .topic-link:hover{background:var(--raised)}
@@ -162,8 +170,8 @@ a.inline:hover{text-decoration-color:currentColor}
 .social-btn>.ph:last-child{color:var(--muted)}
 
 /* Header wordmark in the company serif, "Music" a step smaller */
-.brand-serif{font-family:var(--font-serif);font-weight:600;white-space:nowrap}
-.brand-serif small{font-size:.82em;font-weight:500}
+.brand-serif{font-family:var(--font-serif);font-weight:400;white-space:nowrap}
+.brand-serif small{font-size:.82em;font-weight:400}
 
 /* Glossary */
 .glossary{margin-top:var(--section);border-top:1px solid var(--line)}
@@ -224,12 +232,20 @@ dialog::backdrop{background:rgba(23,23,23,.32)}
 .topic-ico{animation:icon-in .5s var(--ease) both;animation-delay:calc(var(--i,0) * 50ms)}
 .copy-btn .ph-check{color:var(--accent-ink);animation:icon-pop .4s var(--ease)}
 
-/* Page transition */
+/* Page transition. The header stays live (not cross-faded) so its own transitions show. */
+header{view-transition-name:site-header}
+::view-transition-group(site-header),::view-transition-new(site-header){animation:none}
+::view-transition-old(site-header){display:none}
+.veil{position:fixed;inset:0;z-index:30;background:rgba(250,250,250,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);pointer-events:none}
+.veil-ico{position:fixed;display:flex;font-size:22px;line-height:1;color:var(--text)}
+.veil-ico .play{animation:var(--icon-motion,none) .6s var(--ease)}
 ::view-transition-old(selected-topic),::view-transition-new(selected-topic),::view-transition-group(selected-topic){animation-duration:.38s;animation-timing-function:var(--ease)}
 
 @media(max-width:1023px){
   :root{--gutter:32px}
-  .mobile-menu{display:flex}
+  /* on home the menu button folds to nothing; search and contact slide over when it comes back */
+  .mobile-menu{display:flex;transition:width .3s var(--ease),margin .3s var(--ease),opacity .2s,visibility 0s}
+  .is-home .mobile-menu{width:0;margin-left:-8px;opacity:0;visibility:hidden;transition:width .3s var(--ease),margin .3s var(--ease),opacity .2s,visibility 0s .3s}
   /* slides in from the right, next to the menu button */
   aside{position:fixed;top:var(--header);right:0;z-index:9;width:min(300px,85vw);height:calc(100dvh - var(--header));background:var(--bg);border-right:0;border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(0,0,0,.06);transform:translateX(100%);visibility:hidden;transition:transform .3s var(--ease),visibility 0s .3s}
   aside.open{transform:none;visibility:visible;transition:transform .3s var(--ease)}
@@ -246,6 +262,7 @@ dialog::backdrop{background:rgba(23,23,23,.32)}
   .contact{height:32px;padding:0 12px;font-size:var(--fs-meta)}
   main,.is-home main{padding:24px var(--gutter) 64px}
   .hero{padding:8px 0 32px}
+  .hero h1{min-height:3.6em} /* some lines wrap to three on phones; reserve it so the list below doesn't jump */
   .topic-grid{grid-template-columns:1fr}
   .topic-link{min-height:76px;padding:12px 4px}
   .key-facts{padding:16px var(--inset)}
@@ -269,6 +286,7 @@ dialog::backdrop{background:rgba(23,23,23,.32)}
   .brand span{display:none} /* the wordmark alone fits next to search, contact and menu */
   header{padding:0 4px 0 12px}
   .header-right{gap:4px}
+  .is-home .mobile-menu{margin-left:-4px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
