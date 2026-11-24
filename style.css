@@ -329,8 +329,10 @@ html.mail-open{overflow:hidden} /* no scrollbar while the address cover is up */
 /* Japanese only. Relative path: the site is served from /release-guide/, so '/fonts/…' would miss.
    shortcut: the woff2 holds only the glyphs in data.ja.js, faq.ja.js, i18n.js plus kana/ASCII (107KB vs 5MB);
    a new kanji falls back to Hiragino until re-subset: pyftsubset GenShinGothic-Medium.ttf --text-file=<those files> --unicodes=U+0020-007E,U+3000-30FF,U+FF01-FF9F --flavor=woff2 */
-@font-face{font-family:'Gen Shin Gothic';src:url('fonts/GenShinGothic-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
-html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Gen Shin Gothic','Pretendard Variable',Pretendard,'Hiragino Sans',sans-serif;font-weight:500}
+@font-face{font-family:'Gen Shin Gothic';src:url('fonts/GenShinGothic-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;
+  /* Japanese glyphs only (kana, kanji, CJK/full-width punctuation): Latin letters and digits fall through to the usual body font */
+  unicode-range:U+3000-30FF,U+3400-4DBF,U+4E00-9FFF,U+F900-FAFF,U+FF00-FFEF}
+html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Gen Shin Gothic','Pretendard Variable',Pretendard,-apple-system,'Hiragino Sans',sans-serif}
 /* Below desktop: the header has no room, so the segment moves to the menu and the home footer (the browser language already picks the first one) */
 .side-footer .lang-seg,.home-footer .lang-seg{display:none}
 @media(max-width:1023px){
