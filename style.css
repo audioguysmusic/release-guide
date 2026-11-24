@@ -314,3 +314,19 @@ html.mail-open{overflow:hidden} /* no scrollbar while the address cover is up */
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation-duration:.01ms!important}
 }
+
+/* Language segment: plain labels, the current one underlined in the accent */
+.lang-seg{display:flex;align-items:center;gap:2px;margin-right:4px}
+.lang-seg button{position:relative;height:36px;padding:0 8px;color:var(--muted);font-size:var(--fs-meta);font-weight:500;letter-spacing:.02em;transition:color .15s var(--ease)}
+.lang-seg button:hover{color:var(--text)}
+.lang-seg button[aria-pressed=true]{color:var(--accent-ink)}
+.lang-seg button::after{content:'';position:absolute;left:8px;right:8px;bottom:6px;height:2px;border-radius:1px;background:var(--accent);transform:scaleX(0);transition:transform .25s var(--ease)}
+.lang-seg button[aria-pressed=true]::after{transform:none}
+/* Japanese has no spaces, so keep-all would never wrap a sentence; let it break by character with strict kinsoku */
+html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Pretendard Variable',Pretendard,-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif}
+/* Phones: the header has no room, so the segment moves to the menu and the home footer (the browser language already picks the first one) */
+.side-footer .lang-seg,.home-footer .lang-seg{display:none}
+@media(max-width:700px){
+  .header-right>.lang-seg{display:none}
+  .side-footer .lang-seg,.home-footer .lang-seg{display:flex;flex-basis:100%;margin:0 0 8px -8px}
+}

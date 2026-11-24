@@ -1,18 +1,37 @@
-const navs=[['home','시작하기','house'],['distribution','음원 유통 안내','file-text'],['artist','아티스트 페이지','user-circle'],['artwork','아트워크','image'],['ai','AI 활용 음원','sparkle'],['credits','크레딧','users'],['genres','장르 찾기','music-notes'],['settlement','정산 안내','wallet'],['faq','자주 묻는 질문','question'],['glossary','용어 안내','book-open']];
-const pages={distribution:DATA[0],artist:DATA[1],artwork:DATA[2],ai:DATA[3],credits:DATA[4],glossary:DATA[7],settlement:DATA[8],genres:{items:[]}};
-const descriptions={distribution:'제출 자료 · 발매 일정 · Dolby Atmos',artist:'Spotify · Apple Music 클레임',artwork:'커버 이미지 · 제작 의뢰 · 모션 아트워크',ai:'AI 활용 고지 · 선언서 · 권리 확인',credits:'역할과 악기 한글·영문 검색',genres:'발매 장르 한글·영문 검색',settlement:'계약 · 전자서명 · 제출 서류',faq:'유통 · 제작 · 정산 · 계약',glossary:'발매에 필요한 주요 용어'};
-// "핵심 요약": the few numbers and deadlines readers come for, each taken from that page's own text
-const facts={
- distribution:['희망 발매일 5주 전까지 파일 제출','아트워크·프로필 이미지 최소 3000×3000px, RGB, JPG 또는 PNG','음원 wav, aiff 또는 flac, 최소 24bit/44.1kHz 권장','Dolby Atmos 기본 제작 무료 지원(유통 음원에 한함)'],
- artist:['음원이 플랫폼에 정식 딜리버리된 후 클레임','Spotify 승인은 보통 수일 이내','Apple Music은 게재 5영업일 이후 신청, 승인 통상 2~5영업일'],
- artwork:['의뢰는 메일로 접수: ip@audioguyrecords.com','메일 제목: [아트워크 의뢰] 아티스트명 - 앨범 타이틀','모션 아트워크는 당사 제작 시 별도 견적'],
- ai:['유통 신청 양식의 03_AI 활용 고지 작성','AI 활용 음원 제작·유통 확인 및 선언서 제출','고지·선언서·크레딧 시트 내용이 서로 일치해야 함'],
- credits:['국내 플랫폼 크레딧은 작사·작곡·편곡만 노출','추가 참여자는 앨범 소개 하단 [Credits]에 작성','참여자명은 한글명과 영문명 함께 기재'],
- settlement:['계약서는 모두싸인 전자서명으로 진행','제출 서류는 전자서명 요청 메일에서 함께 업로드','정산금은 권리자 본인 명의로만 신청'],
-};
+// Language: picked from ?lang=, then the last choice, then the browser. All three are loaded, so switching is just a re-render.
+const LANG_SRC={ko:[DATA,FAQ],ja:[DATA_JA,FAQ_JA],en:[DATA_EN,FAQ_EN]},LANG_LABEL={ko:'KR',ja:'JP',en:'EN'};
+const NAV_ICONS=[['home','house'],['distribution','file-text'],['artist','user-circle'],['artwork','image'],['ai','sparkle'],['credits','users'],['genres','music-notes'],['settlement','wallet'],['faq','question'],['glossary','book-open']];
+const PAGE_IDX={distribution:0,artist:1,artwork:2,ai:3,credits:4,glossary:7,settlement:8};
+let lang,T,navs,pages,FAQ_L,HEROES,descriptions,facts;
+const fill=(s,o)=>s.replace(/\{(\w+)\}/g,(_,k)=>o[k]);
+function pickLang(){
+ const q=new URLSearchParams(location.search).get('lang');if(LANG_SRC[q])return q;
+ try{const s=localStorage.getItem('lang');if(LANG_SRC[s])return s}catch{}
+ const n=(navigator.language||'').slice(0,2);return n==='ko'||n==='ja'?n:'en';
+}
+function setLang(l){
+ lang=l;T=I18N[l];const [D,F]=LANG_SRC[l];
+ navs=NAV_ICONS.map(([k,i])=>[k,T.nav[k],i]);
+ pages={genres:{items:[]}};for(const k in PAGE_IDX)pages[k]=D[PAGE_IDX[k]];
+ FAQ_L=F;FAQ_L.flatMap(g=>g.items).forEach((f,i)=>f.id='faq-'+(i+1));
+ HEROES=T.heroes;descriptions=T.desc;facts=T.facts;heroBag=[];
+ document.documentElement.lang=l;document.title=T.title;document.querySelector('meta[name=description]').content=T.metaDesc;
+ document.querySelectorAll('[data-t]').forEach(el=>el.textContent=T[el.dataset.t]);
+ document.querySelectorAll('[data-t-aria]').forEach(el=>el.setAttribute('aria-label',T[el.dataset.tAria]));
+ document.querySelectorAll('[data-t-ph]').forEach(el=>el.placeholder=T[el.dataset.tPh]);
+ document.querySelectorAll('.lang-seg').forEach(seg=>seg.innerHTML=segButtons());
+}
+const segButtons=()=>Object.keys(LANG_SRC).map(l=>`<button type="button" data-lang="${l}" lang="${l}" aria-pressed="${l===lang}">${LANG_LABEL[l]}</button>`).join('');
+const segHTML=()=>`<div class="lang-seg" role="group" aria-label="${T.langAria}">${segButtons()}</div>`;
+document.addEventListener('click',e=>{
+ const b=e.target.closest('.lang-seg button');if(!b||b.dataset.lang===lang)return;
+ try{localStorage.setItem('lang',b.dataset.lang)}catch{}
+ const u=new URL(location.href);u.searchParams.set('lang',b.dataset.lang);history.replaceState(null,'',u);
+ setLang(b.dataset.lang);render();
+});
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const main=document.querySelector('#main'), nav=document.querySelector('#nav'), sidebar=document.querySelector('#sidebar'), menuButton=document.querySelector('#menuButton');
-function setMenu(open){sidebar.classList.toggle('open',open);menuButton.setAttribute('aria-expanded',open);menuButton.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기')}
+function setMenu(open){sidebar.classList.toggle('open',open);menuButton.setAttribute('aria-expanded',open);menuButton.setAttribute('aria-label',open?T.menuClose:T.menuOpen)}
 let creditType='Roles';
 
 function navRender(id){nav.innerHTML=navs.map(([key,label,ico])=>`<a href="#${key}"${id===key?' class="active" aria-current="page"':''}><i class="ph ph-${ico}" aria-hidden="true"></i>${label}</a>`).join('')}
@@ -31,10 +50,10 @@ function renderItem(x){
  if(x.type==='table'){
   if(x.rows.length===1&&x.rows[0].length===1)return `<pre class="example">${esc(x.rows[0][0])}</pre>`;
   const [head,...body]=x.rows;
-  const cls=[head[0]==='구분'&&'label-first',head.length>2&&'stack'].filter(Boolean).join(' ');
+  const cls=[['구분','区分','Category'].includes(head[0])&&'label-first',head.length>2&&'stack'].filter(Boolean).join(' ');
   return `<div class="table-wrap"><table${cls?` class="${cls}"`:''}><thead><tr>${head.map(c=>`<th>${linkText(c)}</th>`).join('')}</tr></thead><tbody>${body.map(r=>'<tr>'+r.map((c,i)=>`<td data-label="${esc(head[i])}">${linkText(c)}</td>`).join('')+'</tr>').join('')}</tbody></table></div>`;
  }
- if(x.tone==='quote')return `<figure class="quote"><blockquote>${linkText(x.text)}</blockquote><button type="button" class="copy-btn" data-copy="${esc(x.text)}"><i class="ph ph-copy" aria-hidden="true"></i>복사</button></figure>`;
+ if(x.tone==='quote')return `<figure class="quote"><blockquote>${linkText(x.text)}</blockquote><button type="button" class="copy-btn" data-copy="${esc(x.text)}"><i class="ph ph-copy" aria-hidden="true"></i>${T.copy}</button></figure>`;
  if(x.tone)return `<p class="callout ${x.tone}"><i class="ph ph-${x.tone==='warn'?'warning':'info'}" aria-hidden="true"></i><span>${linkText(x.text)}</span></p>`;
  return `<p>${linkText(x.text)}</p>`;
 }
@@ -44,9 +63,8 @@ function getItems(id){
  return pages[id]?.items||[];
 }
 function renderSections(items){let html='',open=false;for(const x of items){if(x.type==='h'&&x.level===2){if(open)html+='</div></details>';html+=`<details class="guide-accordion"><summary><h2>${esc(x.text)}</h2><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">`;open=true}else html+=renderItem(x)}return html+(open?'</div></details>':'')}
-FAQ.flatMap(g=>g.items).forEach((f,i)=>f.id='faq-'+(i+1));
 const faqAnswer=f=>f.a.map(a=>typeof a==='string'?{type:'p',text:a}:a);
-const renderFaq=()=>FAQ.map(g=>`<section class="faq-group"><h2>${esc(g.cat)}</h2>${g.items.map(f=>`<details class="guide-accordion" id="${f.id}"><summary><h3>${esc(f.q)}</h3><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">${faqAnswer(f).map(renderItem).join('')}</div></details>`).join('')}</section>`).join('');
+const renderFaq=()=>FAQ_L.map(g=>`<section class="faq-group"><h2>${esc(g.cat)}</h2>${g.items.map(f=>`<details class="guide-accordion" id="${f.id}"><summary><h3>${esc(f.q)}</h3><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">${faqAnswer(f).map(renderItem).join('')}</div></details>`).join('')}</section>`).join('');
 const renderGlossary=items=>'<dl class="glossary">'+items.map(x=>x.type==='h'?`<dt>${esc(x.text)}</dt>`:`<dd>${linkText(x.text)}</dd>`).join('')+'</dl>';
 
 // Sections open only on click, one at a time. Height is animated here because ::details-content isn't in every browser.
@@ -76,8 +94,7 @@ main.addEventListener('click',e=>{
 });
 
 // Hero lines rotate every 10s; each change scrambles through glyphs (with a light blur) before settling.
-const HEROES=[['음악이 세상에 닿기까지,','함께 준비해요.'],['첫 발매부터 첫 정산까지,','함께 준비해요.'],['음악은 당신이 만들고,','나머지는 함께해요.'],['좋은 음악이 더 멀리 가도록,','곁에서 준비해요.'],['작업실에서 플레이리스트까지,','함께 걸어요.'],['음악이 공간을 채우기까지,','함께 준비해요.'],['모든 음악을 공간음향으로,','그리고 세상으로.'],['더 넓게 들리는 음악으로,','세상에 내보내요.'],['발매에 필요한 모든 것,','여기서 확인하세요.'],['당신의 다음 발매,','여기서 시작해요.']];
-const GLYPHS='#%&*+=/<>░▒▓◆◇○●가나다라마바사';
+const GLYPHS=()=>'#%&*+=/<>░▒▓◆◇○●'+{ko:'가나다라마바사',ja:'アイウエオカキ',en:'ABCDEFG'}[lang];
 let heroTimer=0,heroBag=[],heroLast=-1;
 // shuffled bag: every line shows once before any repeats, and a new round never starts with the line just shown
 function nextHero(){
@@ -92,29 +109,29 @@ function scrambleHero(h1,lines){
  const D=400,t0=performance.now();
  // each character settles at its own moment, roughly left to right
  const at=lines.map(l=>[...l].map((_,i,arr)=>D*(.15+.6*i/arr.length+.25*Math.random())));
- h1.classList.add('scrambling');
+ h1.classList.add('scrambling');const g=GLYPHS();
  const tick=now=>{
   if(!out.isConnected)return;
   const t=now-t0;
-  out.innerHTML=heroHTML(lines.map((l,j)=>[...l].map((c,i)=>c===' '||t>=at[j][i]?esc(c):`<span class="glyph">${esc(GLYPHS[Math.random()*GLYPHS.length|0])}</span>`).join('')));
+  out.innerHTML=heroHTML(lines.map((l,j)=>[...l].map((c,i)=>c===' '||t>=at[j][i]?esc(c):`<span class="glyph">${esc(g[Math.random()*g.length|0])}</span>`).join('')));
   if(t<D)requestAnimationFrame(tick);else h1.classList.remove('scrambling');
  };
  requestAnimationFrame(tick);
 }
-const home=`<section class="hero"><h1 tabindex="-1" aria-label="${HEROES[0].join(' ')}"><span class="hero-text" aria-hidden="true">${heroHTML(HEROES[0])}</span></h1></section><nav class="topic-grid" aria-label="가이드 주제">${navs.slice(1).map(([id,title,icon],i)=>`<a class="topic-link" href="#${id}"><i class="ph ph-${icon} topic-ico" style="--i:${i}" aria-hidden="true"></i><span class="topic-text"><b>${title}</b><small>${descriptions[id]}</small></span><i class="ph ph-arrow-right topic-arrow" aria-hidden="true"></i></a>`).join('')}</nav><footer class="home-footer"><span>© AUDIOGUY</span><a href="https://audioguy2026.vercel.app/" target="_blank" rel="noopener">공식 웹사이트</a><a href="https://www.youtube.com/@SOUND_360" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/sound360.distribution/" target="_blank" rel="noopener">Instagram</a></footer>`;
+const home=()=>`<section class="hero"><h1 tabindex="-1" aria-label="${HEROES[0].join(' ')}"><span class="hero-text" aria-hidden="true">${heroHTML(HEROES[0])}</span></h1></section><nav class="topic-grid" aria-label="${T.topicsAria}">${navs.slice(1).map(([id,title,icon],i)=>`<a class="topic-link" href="#${id}"><i class="ph ph-${icon} topic-ico" style="--i:${i}" aria-hidden="true"></i><span class="topic-text"><b>${title}</b><small>${descriptions[id]}</small></span><i class="ph ph-arrow-right topic-arrow" aria-hidden="true"></i></a>`).join('')}</nav><footer class="home-footer">${segHTML()}<span>© AUDIOGUY</span><a href="https://audioguy2026.vercel.app/" target="_blank" rel="noopener">${T.website}</a><a href="https://www.youtube.com/@SOUND_360" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/sound360.distribution/" target="_blank" rel="noopener">Instagram</a></footer>`;
 
 function render(){
  const hash=location.hash.slice(1)||'home';let id=hash.startsWith('faq-')?'faq':hash;if(!navs.some(n=>n[0]===id))id='home';
  navRender(id);setMenu(false);document.body.classList.toggle('is-home',id==='home');
  clearInterval(heroTimer);
- if(id==='home'){main.innerHTML=home;const h1=main.querySelector('h1'),first=nextHero();h1.setAttribute('aria-label',first.join(' '));h1.querySelector('.hero-text').innerHTML=heroHTML(first.map(esc));
+ if(id==='home'){main.innerHTML=home();const h1=main.querySelector('h1'),first=nextHero();h1.setAttribute('aria-label',first.join(' '));h1.querySelector('.hero-text').innerHTML=heroHTML(first.map(esc));
   window.scrollTo(0,0);h1.focus({preventScroll:true});
   heroTimer=setInterval(()=>{const h=main.querySelector('.hero h1');if(h)scrambleHero(h,nextHero())},10000);return}
  const title=navs.find(n=>n[0]===id)[1], items=getItems(id);
  const first=items.findIndex(x=>x.type==='h'&&x.level===2), intro=first<0?items:items.slice(0,first), rest=first<0?[]:items.slice(first);
- const extra=id==='genres'?`<section class="tool"><p>영문 장르명이나 한글 키워드로 검색해 주세요.</p><input class="credit-search" id="creditSearch" placeholder="장르 검색" aria-label="장르 검색"><div class="credit-list" id="creditList"></div></section>`
-  :id==='credits'?`<section class="tool"><h2>역할과 악기 찾아보기</h2><p>발매 크레딧에 사용할 역할 또는 악기를 검색해 주세요. 항목을 누르면 영문명이 복사됩니다.</p><div class="credit-controls"><button data-kind="Roles" class="active" aria-pressed="true">역할 Roles</button><button data-kind="Instrument" aria-pressed="false">악기 Instrument</button></div><input class="credit-search" id="creditSearch" placeholder="역할명 또는 한글 키워드" aria-label="크레딧 검색"><div class="hint">원문에 제공된 항목 목록입니다. 최종 등록 가능 여부는 담당자에게 확인해 주세요.</div><p class="cross-hint" id="creditHint" hidden></p><div class="credit-list" id="creditList"></div><button type="button" class="more-btn" id="creditMore" hidden></button></section>`:'';
- main.innerHTML=`<a href="#home" class="back-link"><i class="ph ph-arrow-left" aria-hidden="true"></i>처음으로</a><article class="article"><h1 tabindex="-1">${esc(title)}</h1>${intro.length?`<div class="intro">${intro.map(renderItem).join('')}</div>`:''}${facts[id]?`<section class="key-facts"><h2>핵심 요약</h2><ul>${facts[id].map(f=>`<li>${linkText(f)}</li>`).join('')}</ul></section>`:''}${id==='credits'?'':extra}${id==='glossary'?renderGlossary(rest):id==='faq'?renderFaq():renderSections(rest)}${id==='credits'?extra:''}</article>`;
+ const extra=id==='genres'?`<section class="tool"><p>${T.genresHint}</p><input class="credit-search" id="creditSearch" placeholder="${T.genresPlaceholder}" aria-label="${T.genresPlaceholder}"><div class="credit-list" id="creditList"></div></section>`
+  :id==='credits'?`<section class="tool"><h2>${T.creditsTitle}</h2><p>${T.creditsHint}</p><div class="credit-controls"><button data-kind="Roles" class="active" aria-pressed="true">${T.roles} Roles</button><button data-kind="Instrument" aria-pressed="false">${T.instruments} Instrument</button></div><input class="credit-search" id="creditSearch" placeholder="${T.creditPlaceholder}" aria-label="${T.creditAria}"><div class="hint">${T.creditNote}</div><p class="cross-hint" id="creditHint" hidden></p><div class="credit-list" id="creditList"></div><button type="button" class="more-btn" id="creditMore" hidden></button></section>`:'';
+ main.innerHTML=`<a href="#home" class="back-link"><i class="ph ph-arrow-left" aria-hidden="true"></i>${T.back}</a><article class="article"><h1 tabindex="-1">${esc(title)}</h1>${intro.length?`<div class="intro">${intro.map(renderItem).join('')}</div>`:''}${facts[id]?`<section class="key-facts"><h2>${T.keyFacts}</h2><ul>${facts[id].map(f=>`<li>${linkText(f)}</li>`).join('')}</ul></section>`:''}${id==='credits'?'':extra}${id==='glossary'?renderGlossary(rest):id==='faq'?renderFaq():renderSections(rest)}${id==='credits'?extra:''}</article>`;
  if(id==='genres'){document.querySelector('#creditSearch').oninput=()=>renderCredits(true);renderCredits(true)}
  // credits: the short guidance comes first so the long lookup list below can't bury it
  if(id==='credits'){creditType='Roles';creditsExpanded=false;document.querySelector('#creditMore').onclick=()=>{creditsExpanded=!creditsExpanded;renderCredits()};document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{creditType=b.dataset.kind;creditsExpanded=false;document.querySelectorAll('[data-kind]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',x===b)});renderCredits()});document.querySelector('#creditSearch').oninput=()=>renderCredits(false);renderCredits()}
@@ -130,26 +147,26 @@ function renderCredits(isGenre=false){
  const filtered=creditMatches(isGenre?GENRES:CONTRIBUTORS.filter(x=>x.type===kind),q);
  const target=document.querySelector('#creditList'),more=document.querySelector('#creditMore'),hint=document.querySelector('#creditHint');
  const collapse=!isGenre&&!q&&!creditsExpanded&&filtered.length>CREDIT_PREVIEW;
- target.innerHTML=(collapse?filtered.slice(0,CREDIT_PREVIEW):filtered).map(x=>`<button class="credit-item" data-copy="${esc(x.display_name)}">${esc(x.display_name)}</button>`).join('')||'<p class="hint">검색 결과가 없습니다.</p>';
+ target.innerHTML=(collapse?filtered.slice(0,CREDIT_PREVIEW):filtered).map(x=>`<button class="credit-item" data-copy="${esc(x.display_name)}">${esc(x.display_name)}</button>`).join('')||`<p class="hint">${T.noResults}</p>`;
  target.classList.toggle('is-collapsed',collapse);
  if(isGenre)return;
  more.hidden=!!q||filtered.length<=CREDIT_PREVIEW;
- more.innerHTML=creditsExpanded?'접기<i class="ph ph-caret-up" aria-hidden="true"></i>':`전체 ${filtered.length}개 보기<i class="ph ph-caret-down" aria-hidden="true"></i>`;
+ more.innerHTML=creditsExpanded?`${T.collapse}<i class="ph ph-caret-up" aria-hidden="true"></i>`:`${fill(T.showAll,{n:filtered.length})}<i class="ph ph-caret-down" aria-hidden="true"></i>`;
  more.setAttribute('aria-expanded',creditsExpanded);
  // point to the other tab when it has matches the current one doesn't show
- const otherKind=kind==='role'?'instrument':'role',otherLabel=otherKind==='role'?'역할':'악기',otherCount=q?creditMatches(CONTRIBUTORS.filter(x=>x.type===otherKind),q).length:0;
+ const otherKind=kind==='role'?'instrument':'role',otherLabel=otherKind==='role'?T.roles:T.instruments,otherCount=q?creditMatches(CONTRIBUTORS.filter(x=>x.type===otherKind),q).length:0;
  hint.hidden=!otherCount;
- if(otherCount)hint.innerHTML=`<span>${filtered.length?'':'이 탭에는 결과가 없어요. '}<b>${otherLabel}</b>에서 ${otherCount}개를 찾았어요.</span><button type="button" class="text-link" data-switch="${otherKind==='role'?'Roles':'Instrument'}">${otherLabel}에서 보기<i class="ph ph-arrow-right" aria-hidden="true"></i></button>`;
+ if(otherCount)hint.innerHTML=`<span>${filtered.length?'':T.tabEmpty+' '}${fill(T.foundIn,{tab:otherLabel,n:otherCount})}</span><button type="button" class="text-link" data-switch="${otherKind==='role'?'Roles':'Instrument'}">${fill(T.viewIn,{tab:otherLabel})}<i class="ph ph-arrow-right" aria-hidden="true"></i></button>`;
  hint.classList.toggle('is-empty',!filtered.length);
  if(otherCount&&!filtered.length)target.innerHTML=''; // the hint already says this tab is empty
  hint.querySelector('[data-switch]')?.addEventListener('click',e=>document.querySelector(`[data-kind="${e.currentTarget.dataset.switch}"]`).click());
 }
-document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;try{await navigator.clipboard.writeText(b.dataset.copy);const ico=b.querySelector('.ph-copy');if(ico){ico.classList.replace('ph-copy','ph-check');setTimeout(()=>ico.classList.replace('ph-check','ph-copy'),1500)}let t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent='복사했습니다';document.body.append(t);setTimeout(()=>t.remove(),1800)}catch{alert('복사할 수 없습니다. 항목을 직접 선택해 주세요.')}});
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;try{await navigator.clipboard.writeText(b.dataset.copy);const ico=b.querySelector('.ph-copy');if(ico){ico.classList.replace('ph-copy','ph-check');setTimeout(()=>ico.classList.replace('ph-check','ph-copy'),1500)}let t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=T.copied;document.body.append(t);setTimeout(()=>t.remove(),1800)}catch{alert(T.copyFail)}});
 
 const dialog=document.querySelector('#searchDialog'),input=document.querySelector('#searchInput'),results=document.querySelector('#searchResults');
-function search(){let q=input.value.trim().toLowerCase();if(!q){results.innerHTML='<div class="hint">검색어를 입력해 주세요.</div>';return}const found=[];for(const f of FAQ.flatMap(g=>g.items))if((f.q+' '+faqAnswer(f).map(itemText).join(' ')).toLowerCase().includes(q))found.push({id:f.id,label:'자주 묻는 질문',text:f.q});
+function search(){let q=input.value.trim().toLowerCase();if(!q){results.innerHTML=`<div class="hint">${T.enterQuery}</div>`;return}const found=[];for(const f of FAQ_L.flatMap(g=>g.items))if((f.q+' '+faqAnswer(f).map(itemText).join(' ')).toLowerCase().includes(q))found.push({id:f.id,label:T.nav.faq,text:f.q});
  for(const [id,label] of navs){if(id==='home'||id==='faq')continue;for(const item of getItems(id)){const text=itemText(item);if(text.toLowerCase().includes(q))found.push({id,label,text:text.slice(0,130)})}}
- results.innerHTML=found.slice(0,30).map(x=>`<a href="#${x.id}"><b>${esc(x.label)}</b><small>${esc(x.text)}</small></a>`).join('')||'<p class="hint">검색 결과가 없습니다.</p>';results.querySelectorAll('a').forEach(a=>a.onclick=()=>dialog.close())}
+ results.innerHTML=found.slice(0,30).map(x=>`<a href="#${x.id}"><b>${esc(x.label)}</b><small>${esc(x.text)}</small></a>`).join('')||`<p class="hint">${T.noResults}</p>`;results.querySelectorAll('a').forEach(a=>a.onclick=()=>dialog.close())}
 const openSearch=()=>{if(!dialog.open){dialog.showModal();input.focus();search()}};
 document.querySelector('#searchButton').onclick=openSearch;document.querySelector('#closeSearch').onclick=()=>dialog.close();
 // dialog has no padding, so only the backdrop targets it; also require the press to start there, so a text drag ending outside doesn't close it
@@ -202,7 +219,7 @@ window.addEventListener('hashchange',()=>{
  }else render();
  previousId=nextId;
 });
-render();
+setLang(pickLang());render();
 
 // Mail links: some browsers have no mail app set up, so the clicked button grows into a dark cover showing the address
 // large (click to copy), then the mailto is handed off. Any click outside the address, or Esc, shrinks it back.
@@ -219,8 +236,8 @@ document.addEventListener('click',e=>{
  const a=e.target.closest('a[href^="mailto:"]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
  e.preventDefault();if(mailVeil)return;
  const addr=a.getAttribute('href').slice(7).split('?')[0],v=mailVeil=document.createElement('div');
- v.className='mail-veil';v.setAttribute('role','dialog');v.setAttribute('aria-label','메일 주소');v._from=a;
- v.innerHTML=`<div class="mail-box"><button type="button" class="mail-addr" data-copy="${esc(addr)}" aria-label="${esc(addr)} 복사">${esc(addr)}</button></div>`;
+ v.className='mail-veil';v.setAttribute('role','dialog');v.setAttribute('aria-label',T.mailAria);v._from=a;
+ v.innerHTML=`<div class="mail-box"><button type="button" class="mail-addr" data-copy="${esc(addr)}" aria-label="${esc(fill(T.copyAria,{addr}))}">${esc(addr)}</button></div>`;
  v.onclick=ev=>{if(!ev.target.closest('.mail-addr'))closeMail()};
  document.body.append(v);v.querySelector('.mail-addr').focus({preventScroll:true});
  const go=()=>{if(mailVeil!==v)return;document.documentElement.classList.add('mail-open');location.href=a.href};

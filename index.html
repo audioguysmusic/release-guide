@@ -13,30 +13,32 @@
 </head>
 <body>
 <header>
-  <a class="brand" href="#home"><b class="brand-serif">Audioguys <small>Music</small></b><span>발매 가이드</span></a>
+  <a class="brand" href="#home"><b class="brand-serif">Audioguys <small>Music</small></b><span data-t="brandSub">발매 가이드</span></a>
   <div class="header-right">
-    <button id="searchButton" class="search-trigger" aria-label="검색 열기"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span>가이드 검색</span><kbd>⌘K</kbd></button>
-    <a href="mailto:ip@audioguyrecords.com" class="contact">문의하기</a>
+    <div class="lang-seg" role="group" data-t-aria="langAria" aria-label="언어 선택"></div>
+    <button id="searchButton" class="search-trigger" data-t-aria="searchOpen" aria-label="검색 열기"><i class="ph ph-magnifying-glass" aria-hidden="true"></i><span data-t="search">가이드 검색</span><kbd>⌘K</kbd></button>
+    <a href="mailto:ip@audioguyrecords.com" class="contact" data-t="contact">문의하기</a>
     <button id="menuButton" class="mobile-menu" aria-label="메뉴 열기" aria-expanded="false"><span class="burger" aria-hidden="true"><span></span><span></span><span></span></span></button>
   </div>
 </header>
 <div class="layout">
   <aside id="sidebar">
-    <nav id="nav" aria-label="가이드 메뉴"></nav>
+    <nav id="nav" data-t-aria="navAria" aria-label="가이드 메뉴"></nav>
     <div class="side-footer">
+      <div class="lang-seg" role="group" data-t-aria="langAria" aria-label="언어 선택"></div>
       <span>© AUDIOGUY</span>
-      <a href="https://audioguy2026.vercel.app/" target="_blank" rel="noopener">공식 웹사이트</a>
+      <a href="https://audioguy2026.vercel.app/" target="_blank" rel="noopener" data-t="website">공식 웹사이트</a>
       <a href="https://www.youtube.com/@SOUND_360" target="_blank" rel="noopener">YouTube</a>
       <a href="https://www.instagram.com/sound360.distribution/" target="_blank" rel="noopener">Instagram</a>
     </div>
   </aside>
   <main id="main"></main>
 </div>
-<dialog id="searchDialog" aria-label="가이드 검색">
+<dialog id="searchDialog" data-t-aria="search" aria-label="가이드 검색">
   <div class="dialog-top">
     <label for="searchInput"><i class="ph ph-magnifying-glass" aria-hidden="true"></i></label>
-    <input id="searchInput" placeholder="가이드 검색" autocomplete="off">
-    <button id="closeSearch" aria-label="닫기"><i class="ph ph-x" aria-hidden="true"></i></button>
+    <input id="searchInput" data-t-ph="search" placeholder="가이드 검색" autocomplete="off">
+    <button id="closeSearch" data-t-aria="close" aria-label="닫기"><i class="ph ph-x" aria-hidden="true"></i></button>
   </div>
   <div id="searchResults" class="results"></div>
 </dialog>
@@ -44,6 +46,11 @@
 <script src="contributors.js"></script>
 <script src="genres.js"></script>
 <script src="faq.js"></script>
+<script src="data.ja.js"></script>
+<script src="faq.ja.js"></script>
+<script src="data.en.js"></script>
+<script src="faq.en.js"></script>
+<script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
