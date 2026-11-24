@@ -149,7 +149,7 @@ function renderCredits(isGenre=false){
  if(otherCount&&!filtered.length)target.innerHTML=''; // the hint already says this tab is empty
  hint.querySelector('[data-switch]')?.addEventListener('click',e=>document.querySelector(`[data-kind="${e.currentTarget.dataset.switch}"]`).click());
 }
-main.addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;try{await navigator.clipboard.writeText(b.dataset.copy);const ico=b.querySelector('.ph-copy');if(ico){ico.classList.replace('ph-copy','ph-check');setTimeout(()=>ico.classList.replace('ph-check','ph-copy'),1500)}let t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent='복사했습니다';document.body.append(t);setTimeout(()=>t.remove(),1800)}catch{alert('복사할 수 없습니다. 항목을 직접 선택해 주세요.')}});
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;try{await navigator.clipboard.writeText(b.dataset.copy);const ico=b.querySelector('.ph-copy');if(ico){ico.classList.replace('ph-copy','ph-check');setTimeout(()=>ico.classList.replace('ph-check','ph-copy'),1500)}let t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent='복사했습니다';document.body.append(t);setTimeout(()=>t.remove(),1800)}catch{alert('복사할 수 없습니다. 항목을 직접 선택해 주세요.')}});
 
 const dialog=document.querySelector('#searchDialog'),input=document.querySelector('#searchInput'),results=document.querySelector('#searchResults');
 function search(){let q=input.value.trim().toLowerCase();if(!q){results.innerHTML='<div class="hint">검색어를 입력해 주세요.</div>';return}const found=[];for(const f of FAQ.flatMap(g=>g.items))if((f.q+' '+faqAnswer(f).map(itemText).join(' ')).toLowerCase().includes(q))found.push({id:f.id,label:'자주 묻는 질문',text:f.q});
@@ -208,3 +208,26 @@ window.addEventListener('hashchange',()=>{
  previousId=nextId;
 });
 render();
+
+// Mail links: some browsers have no mail app set up, so the clicked button grows into a dark cover showing the address
+// large (click to copy), then the mailto is handed off. Any click outside the address, or Esc, shrinks it back.
+let mailVeil=null;
+const btnClip=(r,rad)=>`inset(${r.top}px ${innerWidth-r.right}px ${innerHeight-r.bottom}px ${r.left}px round ${rad}px)`;
+function closeMail(){const v=mailVeil;if(!v)return;mailVeil=null;v.classList.remove('is-on');v._from.focus({preventScroll:true});
+ const done=()=>{v.remove();if(!mailVeil)document.documentElement.classList.remove('mail-open')};
+ if(reduce.matches){done();return}
+ v.animate({clipPath:['inset(0px 0px 0px 0px round 0px)',btnClip(v._from.getBoundingClientRect(),8)]},{duration:380,delay:120,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'}).finished.then(done)}
+document.addEventListener('click',e=>{
+ const a=e.target.closest('a[href^="mailto:"]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
+ e.preventDefault();if(mailVeil)return;
+ const addr=a.getAttribute('href').slice(7).split('?')[0],v=mailVeil=document.createElement('div');
+ v.className='mail-veil';v.setAttribute('role','dialog');v.setAttribute('aria-label','메일 주소');v._from=a;
+ v.innerHTML=`<div class="mail-box"><button type="button" class="mail-addr" data-copy="${esc(addr)}" aria-label="${esc(addr)} 복사">${esc(addr)}</button></div>`;
+ v.onclick=ev=>{if(!ev.target.closest('.mail-addr'))closeMail()};
+ document.body.append(v);document.documentElement.classList.add('mail-open');v.querySelector('.mail-addr').focus({preventScroll:true});
+ const go=()=>{if(mailVeil===v)location.href=a.href};
+ if(reduce.matches){v.classList.add('is-on');go();return}
+ v.animate({clipPath:[btnClip(a.getBoundingClientRect(),8),'inset(0px 0px 0px 0px round 0px)']},{duration:500,easing:'cubic-bezier(.2,0,0,1)',fill:'forwards'}).finished.then(go);
+ requestAnimationFrame(()=>v.classList.add('is-on'));
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMail()});
