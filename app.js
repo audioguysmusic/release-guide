@@ -212,11 +212,14 @@ render();
 // Mail links: some browsers have no mail app set up, so the clicked button grows into a dark cover showing the address
 // large (click to copy), then the mailto is handed off. Any click outside the address, or Esc, shrinks it back.
 let mailVeil=null;
-const btnClip=(r,rad)=>`inset(${r.top}px ${innerWidth-r.right}px ${innerHeight-r.bottom}px ${r.left}px round ${rad}px)`;
+// measured against the veil itself: it is fixed, so its width excludes the scrollbar and innerWidth would land 15px off
+const btnClip=(v,r,rad)=>`inset(${r.top}px ${v.clientWidth-r.right}px ${v.clientHeight-r.bottom}px ${r.left}px round ${rad}px)`;
 function closeMail(){const v=mailVeil;if(!v)return;mailVeil=null;v.classList.remove('is-on');v._from.focus({preventScroll:true});
- const done=()=>{v.remove();if(!mailVeil)document.documentElement.classList.remove('mail-open')};
+ // scrollbar comes back while the cover is still full, so the page shift happens out of sight and the shrink targets the settled button
+ document.documentElement.classList.remove('mail-open');
+ const done=()=>v.remove();
  if(reduce.matches){done();return}
- v.animate({clipPath:['inset(0px 0px 0px 0px round 0px)',btnClip(v._from.getBoundingClientRect(),8)]},{duration:380,delay:120,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'}).finished.then(done)}
+ v.animate({clipPath:['inset(0px 0px 0px 0px round 0px)',btnClip(v,v._from.getBoundingClientRect(),8)]},{duration:380,delay:120,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'}).finished.then(done)}
 document.addEventListener('click',e=>{
  const a=e.target.closest('a[href^="mailto:"]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
  e.preventDefault();if(mailVeil)return;
@@ -224,10 +227,10 @@ document.addEventListener('click',e=>{
  v.className='mail-veil';v.setAttribute('role','dialog');v.setAttribute('aria-label','메일 주소');v._from=a;
  v.innerHTML=`<div class="mail-box"><button type="button" class="mail-addr" data-copy="${esc(addr)}" aria-label="${esc(addr)} 복사">${esc(addr)}</button></div>`;
  v.onclick=ev=>{if(!ev.target.closest('.mail-addr'))closeMail()};
- document.body.append(v);document.documentElement.classList.add('mail-open');v.querySelector('.mail-addr').focus({preventScroll:true});
- const go=()=>{if(mailVeil===v)location.href=a.href};
+ document.body.append(v);v.querySelector('.mail-addr').focus({preventScroll:true});
+ const go=()=>{if(mailVeil!==v)return;document.documentElement.classList.add('mail-open');location.href=a.href};
  if(reduce.matches){v.classList.add('is-on');go();return}
- v.animate({clipPath:[btnClip(a.getBoundingClientRect(),8),'inset(0px 0px 0px 0px round 0px)']},{duration:500,easing:'cubic-bezier(.2,0,0,1)',fill:'forwards'}).finished.then(go);
+ v.animate({clipPath:[btnClip(v,a.getBoundingClientRect(),8),'inset(0px 0px 0px 0px round 0px)']},{duration:500,easing:'cubic-bezier(.2,0,0,1)',fill:'forwards'}).finished.then(go);
  requestAnimationFrame(()=>v.classList.add('is-on'));
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMail()});
