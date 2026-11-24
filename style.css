@@ -224,7 +224,11 @@ dialog::backdrop{background:rgba(23,23,23,.32)}
 .ph-music-notes,.ph-question{--icon-motion:icon-wobble}
 .ph-magnifying-glass{--icon-motion:icon-search}
 .ph-arrow-up-right{--icon-motion:icon-launch}
-:is(.topic-link,#nav a,.social-btn,.search-trigger,.copy-btn):is(:hover,:focus-visible) .ph{animation:var(--icon-motion,none) .6s var(--ease)}
+:is(#nav a,.social-btn,.search-trigger,.copy-btn):is(:hover,:focus-visible) .ph{animation:var(--icon-motion,none) .6s var(--ease)}
+/* Home tiles: the icon element already carries the one-time draw-in, so hover motion plays on its glyph;
+   swapping the element's animation would replay the draw-in (small, faded, soft) every time the pointer leaves */
+.topic-ico::before{display:inline-block}
+.topic-link:is(:hover,:focus-visible) .topic-ico::before{animation:var(--icon-motion,none) .6s var(--ease)}
 @keyframes icon-hop{40%{transform:translateY(-3px)}70%{transform:translateY(1px)}}
 @keyframes icon-tilt{30%{transform:rotate(-12deg)}65%{transform:rotate(6deg)}}
 @keyframes icon-pop{40%{transform:scale(1.18)}70%{transform:scale(.95)}}
