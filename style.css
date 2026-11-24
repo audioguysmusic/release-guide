@@ -132,6 +132,13 @@ main{flex:1;min-width:0;padding:var(--section) var(--gutter) 96px}
 .article .key-facts ul{list-style:none;padding:0;gap:8px}
 .article .key-facts li{position:relative;padding-left:16px;font-weight:500;line-height:var(--lh-ui)}
 .key-facts li::before{content:'';position:absolute;left:0;top:.6em;width:6px;height:6px;border-radius:50%;background:var(--accent-ink)}
+/* Sheet names inside the form: a muted khaki that stays distinct on white, the grey well and the yellow warn callout */
+mark.doc{padding:1px 5px;border-radius:4px;background:rgba(120,96,24,.14);color:inherit;font-weight:500;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+/* Page-end contact block, shared by every topic page */
+.contact-card{display:flex;align-items:center;justify-content:space-between;gap:16px var(--inset);flex-wrap:wrap;margin-top:var(--section);padding:20px var(--inset);border:1px solid var(--line);background:var(--surface)}
+.contact-card h2{font-size:var(--fs-h3);line-height:var(--lh-head)}
+.article .contact-card p{margin-top:4px;color:var(--text-2);font-size:var(--fs-ui);line-height:var(--lh-ui);max-width:52ch}
+.contact-card .contact{gap:8px;height:40px}
 .article .callout{display:flex;gap:12px;color:var(--text-2);font-size:var(--fs-body);line-height:var(--lh-body)}
 .callout .ph{margin-top:5px;color:var(--muted)}
 .article .callout.warn{padding:12px 16px;border:1px solid rgba(161,98,7,.18);background:#fdf7ea;color:var(--text)}
