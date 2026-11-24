@@ -12,7 +12,7 @@ function pickLang(){
 function setLang(l){
  lang=l;T=I18N[l];const [D,F]=LANG_SRC[l];
  navs=NAV_ICONS.map(([k,i])=>[k,T.nav[k],i]);
- pages={genres:{items:[]}};for(const k in PAGE_IDX)pages[k]=D[PAGE_IDX[k]];
+ pages={};for(const k in PAGE_IDX)pages[k]=D[PAGE_IDX[k]];
  FAQ_L=F;FAQ_L.flatMap(g=>g.items).forEach((f,i)=>f.id='faq-'+(i+1));
  HEROES=T.heroes;descriptions=T.desc;facts=T.facts;heroBag=[];
  document.documentElement.lang=l;document.title=T.title;document.querySelector('meta[name=description]').content=T.metaDesc;
@@ -27,7 +27,15 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('.lang-seg button');if(!b||b.dataset.lang===lang)return;
  try{localStorage.setItem('lang',b.dataset.lang)}catch{}
  const u=new URL(location.href);u.searchParams.set('lang',b.dataset.lang);history.replaceState(null,'',u);
+ // keep what the reader was doing: credits tab and query, home scroll, and focus on the segment they used
+ const q=document.querySelector('#creditSearch')?.value,kind=creditType,onHome=location.hash.slice(1)==='home'||!location.hash,y=scrollY,inMenu=!!b.closest('aside');
  setLang(b.dataset.lang);render();
+ // the words change in place, so fade them in the way the page icons draw in
+ if(!reduce.matches)document.querySelectorAll('main,#nav,.brand span,.search-trigger span,.contact,.side-footer a').forEach(el=>el.animate({opacity:[0,1],transform:['translateY(3px)','none']},{duration:360,easing:'cubic-bezier(.22,1,.36,1)'}));
+ const s=document.querySelector('#creditSearch');if(s&&q)s.value=q;
+ if(document.querySelector('[data-kind]')&&kind!=='Roles')document.querySelector(`[data-kind="${kind}"]`).click();else if(s&&q)s.oninput();
+ if(onHome)scrollTo(0,y);
+ (inMenu?menuButton:document.querySelector(`${b.closest('header')?'header':'.home-footer'} [data-lang="${lang}"]`))?.focus({preventScroll:true});
 });
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const main=document.querySelector('#main'), nav=document.querySelector('#nav'), sidebar=document.querySelector('#sidebar'), menuButton=document.querySelector('#menuButton');
@@ -39,7 +47,7 @@ function navRender(id){nav.innerHTML=navs.map(([key,label,ico])=>`<a href="#${ke
 const DOC_RE=/\b0\d_(?:AI 활용 고지|[^\s,.()<]+)/g;
 function linkText(s){return esc(s).replace(DOC_RE,'<mark class="doc">$&</mark>').replace(/(https?:\/\/[^\s<]+)/g,(u)=>`<a class="inline" href="${u}" target="_blank" rel="noopener noreferrer">${u.replace(/^https?:\/\//,'')}</a>`).replace(/ip@audioguyrecords\.com/g,'<a class="inline" href="mailto:ip@audioguyrecords.com">ip@audioguyrecords.com</a>')}
 // "라벨: 내용" gets a bold label; lines after the first become a quiet note under the item
-function liText(s){const [first,...rest]=String(s).split('\n');return linkText(first).replace(/^([^:<]{1,24}):\s/,'<b>$1</b> ')+rest.map(r=>`<span class="li-note">${linkText(r)}</span>`).join('')}
+function liText(s){const [first,...rest]=String(s).split('\n');return linkText(first).replace(/^([^:<]{1,32}):\s/,'<b>$1</b> ')+rest.map(r=>`<span class="li-note">${linkText(r)}</span>`).join('')}
 const li=i=>typeof i==='string'?`<li>${liText(i)}</li>`:`<li>${liText(i.text)}<ul>${i.items.map(li).join('')}</ul></li>`;
 function renderItem(x){
  if(x.type==='h')return `<h${x.level}>${esc(x.text)}</h${x.level}>`;
@@ -65,7 +73,8 @@ function getItems(id){
 function renderSections(items){let html='',open=false;for(const x of items){if(x.type==='h'&&x.level===2){if(open)html+='</div></details>';html+=`<details class="guide-accordion"><summary><h2>${esc(x.text)}</h2><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">`;open=true}else html+=renderItem(x)}return html+(open?'</div></details>':'')}
 const faqAnswer=f=>f.a.map(a=>typeof a==='string'?{type:'p',text:a}:a);
 const renderFaq=()=>FAQ_L.map(g=>`<section class="faq-group"><h2>${esc(g.cat)}</h2>${g.items.map(f=>`<details class="guide-accordion" id="${f.id}"><summary><h3>${esc(f.q)}</h3><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">${faqAnswer(f).map(renderItem).join('')}</div></details>`).join('')}</section>`).join('');
-const renderGlossary=items=>'<dl class="glossary">'+items.map(x=>x.type==='h'?`<dt>${esc(x.text)}</dt>`:`<dd>${linkText(x.text)}</dd>`).join('')+'</dl>';
+// one <div> per term, so a term with several paragraphs keeps a single divider under it
+const renderGlossary=items=>'<dl class="glossary">'+items.map((x,i)=>x.type==='h'?`${i?'</div>':''}<div class="term"><dt>${esc(x.text)}</dt>`:`<dd>${linkText(x.text)}</dd>`).join('')+'</div></dl>';
 
 // Sections open only on click, one at a time. Height is animated here because ::details-content isn't in every browser.
 const reduce=matchMedia('(prefers-reduced-motion: reduce)'),DUR=320,easeOut=p=>1-(1-p)**3;
@@ -88,7 +97,7 @@ main.addEventListener('click',e=>{
  // Hold the title still while sections resize; once an opened one has its full height, bring its start under the header.
  // The hold must stop before the scroll starts: any scrollBy would cancel the smooth scroll.
  const v0=s.getBoundingClientRect().top;let settled=!anim;
- const hold=()=>{if(settled)return;scrollBy(0,s.getBoundingClientRect().top-v0);requestAnimationFrame(hold)};
+ const hold=()=>{if(settled||!s.isConnected)return;scrollBy(0,s.getBoundingClientRect().top-v0);requestAnimationFrame(hold)};
  requestAnimationFrame(hold);
  (anim?anim.finished:Promise.resolve()).then(()=>{settled=true;if(open)s.scrollIntoView({block:'start',behavior:reduce.matches?'auto':'smooth'})},()=>{settled=true});
 });
@@ -130,7 +139,7 @@ function render(){
  const title=navs.find(n=>n[0]===id)[1], items=getItems(id);
  const first=items.findIndex(x=>x.type==='h'&&x.level===2), intro=first<0?items:items.slice(0,first), rest=first<0?[]:items.slice(first);
  const extra=id==='genres'?`<section class="tool"><p>${T.genresHint}</p><input class="credit-search" id="creditSearch" placeholder="${T.genresPlaceholder}" aria-label="${T.genresPlaceholder}"><div class="credit-list" id="creditList"></div></section>`
-  :id==='credits'?`<section class="tool"><h2>${T.creditsTitle}</h2><p>${T.creditsHint}</p><div class="credit-controls"><button data-kind="Roles" class="active" aria-pressed="true">${T.roles} Roles</button><button data-kind="Instrument" aria-pressed="false">${T.instruments} Instrument</button></div><input class="credit-search" id="creditSearch" placeholder="${T.creditPlaceholder}" aria-label="${T.creditAria}"><div class="hint">${T.creditNote}</div><p class="cross-hint" id="creditHint" hidden></p><div class="credit-list" id="creditList"></div><button type="button" class="more-btn" id="creditMore" hidden></button></section>`:'';
+  :id==='credits'?`<section class="tool"><h2>${T.creditsTitle}</h2><p>${T.creditsHint}</p><div class="credit-controls"><button data-kind="Roles" class="active" aria-pressed="true">${T.roles}${lang==='en'?'':' Roles'}</button><button data-kind="Instrument" aria-pressed="false">${T.instruments}${lang==='en'?'':' Instrument'}</button></div><input class="credit-search" id="creditSearch" placeholder="${T.creditPlaceholder}" aria-label="${T.creditAria}"><div class="hint">${T.creditNote}</div><p class="cross-hint" id="creditHint" hidden></p><div class="credit-list" id="creditList"></div><button type="button" class="more-btn" id="creditMore" hidden></button></section>`:'';
  main.innerHTML=`<a href="#home" class="back-link"><i class="ph ph-arrow-left" aria-hidden="true"></i>${T.back}</a><article class="article"><h1 tabindex="-1">${esc(title)}</h1>${intro.length?`<div class="intro">${intro.map(renderItem).join('')}</div>`:''}${facts[id]?`<section class="key-facts"><h2>${T.keyFacts}</h2><ul>${facts[id].map(f=>`<li>${linkText(f)}</li>`).join('')}</ul></section>`:''}${id==='credits'?'':extra}${id==='glossary'?renderGlossary(rest):id==='faq'?renderFaq():renderSections(rest)}${id==='credits'?extra:''}</article>`;
  if(id==='genres'){document.querySelector('#creditSearch').oninput=()=>renderCredits(true);renderCredits(true)}
  // credits: the short guidance comes first so the long lookup list below can't bury it
@@ -166,7 +175,7 @@ document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy
 const dialog=document.querySelector('#searchDialog'),input=document.querySelector('#searchInput'),results=document.querySelector('#searchResults');
 function search(){let q=input.value.trim().toLowerCase();if(!q){results.innerHTML=`<div class="hint">${T.enterQuery}</div>`;return}const found=[];for(const f of FAQ_L.flatMap(g=>g.items))if((f.q+' '+faqAnswer(f).map(itemText).join(' ')).toLowerCase().includes(q))found.push({id:f.id,label:T.nav.faq,text:f.q});
  for(const [id,label] of navs){if(id==='home'||id==='faq')continue;for(const item of getItems(id)){const text=itemText(item);if(text.toLowerCase().includes(q))found.push({id,label,text:text.slice(0,130)})}}
- results.innerHTML=found.slice(0,30).map(x=>`<a href="#${x.id}"><b>${esc(x.label)}</b><small>${esc(x.text)}</small></a>`).join('')||`<p class="hint">${T.noResults}</p>`;results.querySelectorAll('a').forEach(a=>a.onclick=()=>dialog.close())}
+ results.innerHTML=found.slice(0,30).map(x=>`<a href="#${x.id}"><b>${esc(x.label)}</b><small>${esc(x.text)}</small></a>`).join('')||`<p class="hint">${T.noResults}</p>`;results.querySelectorAll('a').forEach(a=>a.onclick=()=>{dialog.close();if(a.getAttribute('href')===location.hash)render()})}
 const openSearch=()=>{if(!dialog.open){dialog.showModal();input.focus();search()}};
 document.querySelector('#searchButton').onclick=openSearch;document.querySelector('#closeSearch').onclick=()=>dialog.close();
 // dialog has no padding, so only the backdrop targets it; also require the press to start there, so a text drag ending outside doesn't close it
@@ -207,10 +216,9 @@ main.addEventListener('click',e=>{
 });
 window.addEventListener('hashchange',()=>{
  const nextId=location.hash.slice(1)||'home';
- const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
  const start=document.querySelector(`.topic-link[href="#${nextId}"]`);
  const endId=previousId;
- if(!reduced&&document.startViewTransition){
+ if(!reduce.matches&&document.startViewTransition){
   if(start)start.style.viewTransitionName='selected-topic';
   if(nextId==='home')main.style.viewTransitionName='selected-topic';
   const transition=document.startViewTransition(()=>{render();if(nextId==='home'){main.style.viewTransitionName='';const target=document.querySelector(`.topic-link[href="#${endId}"]`);if(target)target.style.viewTransitionName='selected-topic'}else{main.style.viewTransitionName='selected-topic'}});
@@ -224,14 +232,17 @@ setLang(pickLang());render();
 // Mail links: some browsers have no mail app set up, so the clicked button grows into a dark cover showing the address
 // large (click to copy), then the mailto is handed off. Any click outside the address, or Esc, shrinks it back.
 let mailVeil=null;
+// scrollbar-gutter:stable keeps the layout width, so this only hides the bar drawn over the cover's right edge
+const setScrollLock=on=>document.documentElement.classList.toggle('mail-open',on);
 // measured against the veil itself: it is fixed, so its width excludes the scrollbar and innerWidth would land 15px off
 const btnClip=(v,r,rad)=>`inset(${r.top}px ${v.clientWidth-r.right}px ${v.clientHeight-r.bottom}px ${r.left}px round ${rad}px)`;
 function closeMail(){const v=mailVeil;if(!v)return;mailVeil=null;v.classList.remove('is-on');v._from.focus({preventScroll:true});
- // scrollbar comes back while the cover is still full, so the page shift happens out of sight and the shrink targets the settled button
- document.documentElement.classList.remove('mail-open');
- const done=()=>v.remove();
+ // the scrollbar stays hidden until the cover is gone: brought back earlier, it pops in over the dark cover's right edge
+ const done=()=>{v.remove();setScrollLock(false)};
  if(reduce.matches){done();return}
- v.animate({clipPath:['inset(0px 0px 0px 0px round 0px)',btnClip(v,v._from.getBoundingClientRect(),8)]},{duration:380,delay:120,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'}).finished.then(done)}
+ v.animate({clipPath:['inset(0px 0px 0px 0px round 0px)',btnClip(v,v._from.getBoundingClientRect(),8)]},{duration:380,delay:120,easing:'cubic-bezier(.65,0,.35,1)',fill:'forwards'}).finished
+  // the cover lands on the button as a blank dark box; fade it so the label shows through instead of popping in
+  .then(()=>v.animate({opacity:[1,0]},{duration:140,easing:'ease-out',fill:'forwards'}).finished).then(done)}
 document.addEventListener('click',e=>{
  const a=e.target.closest('a[href^="mailto:"]');if(!a||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
  e.preventDefault();if(mailVeil)return;
@@ -240,7 +251,7 @@ document.addEventListener('click',e=>{
  v.innerHTML=`<div class="mail-box"><button type="button" class="mail-addr" data-copy="${esc(addr)}" aria-label="${esc(fill(T.copyAria,{addr}))}">${esc(addr)}</button></div>`;
  v.onclick=ev=>{if(!ev.target.closest('.mail-addr'))closeMail()};
  document.body.append(v);v.querySelector('.mail-addr').focus({preventScroll:true});
- const go=()=>{if(mailVeil!==v)return;document.documentElement.classList.add('mail-open');location.href=a.href};
+ const go=()=>{if(mailVeil!==v)return;setScrollLock(true);location.href=a.href};
  if(reduce.matches){v.classList.add('is-on');go();return}
  v.animate({clipPath:[btnClip(v,a.getBoundingClientRect(),8),'inset(0px 0px 0px 0px round 0px)']},{duration:500,easing:'cubic-bezier(.2,0,0,1)',fill:'forwards'}).finished.then(go);
  requestAnimationFrame(()=>v.classList.add('is-on'));

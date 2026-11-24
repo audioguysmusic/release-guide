@@ -38,8 +38,9 @@ header{position:sticky;top:0;z-index:10;height:var(--header);display:flex;align-
 .search-trigger{display:flex;align-items:center;gap:8px;width:240px;height:36px;padding:0 8px 0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);font-size:var(--fs-ui);transition:border-color .15s var(--ease)}
 .search-trigger:hover{border-color:var(--line-strong)}
 kbd{margin-left:auto;padding:4px 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--bg);color:var(--muted);font:500 var(--fs-micro)/1 var(--mono)}
-.contact{display:inline-flex;align-items:center;height:36px;padding:0 16px;border-radius:8px;background:var(--text);color:#fff;font-size:var(--fs-ui);font-weight:500;white-space:nowrap;transition:background-color .15s var(--ease)}
+.contact{display:inline-flex;align-items:center;justify-content:center;min-width:116px;height:36px;padding:0 16px;border-radius:8px;background:var(--text);color:#fff;font-size:var(--fs-ui);font-weight:500;white-space:nowrap;transition:background-color .15s var(--ease)}
 .contact:hover{background:#3a3a3a}
+/* shortcut: min-width is the widest label (JP お問い合わせ) so switching language doesn't shove the header; re-measure if a label changes */
 .mobile-menu{display:none;width:40px;height:40px;align-items:center;justify-content:center;border-radius:8px;overflow:hidden}
 .burger{position:relative;width:18px;height:12px}
 .burger span{position:absolute;left:0;width:100%;height:1.5px;border-radius:1px;background:currentColor;transition:transform .25s var(--ease),opacity .2s var(--ease)}
@@ -174,7 +175,9 @@ a.inline:hover{text-decoration-color:currentColor}
 /* Glossary */
 .glossary{margin-top:var(--section);border-top:1px solid var(--line)}
 .glossary dt{padding-top:20px;font-size:var(--fs-h3);font-weight:600;line-height:var(--lh-head)}
-.glossary dd{padding:4px 0 20px;border-bottom:1px solid var(--line);color:var(--text-2);font-size:var(--fs-body);line-height:var(--lh-body)}
+.glossary .term{padding-bottom:20px;border-bottom:1px solid var(--line)}
+.glossary dd+dd{padding-top:12px}
+.glossary dd{padding-top:4px;color:var(--text-2);font-size:var(--fs-body);line-height:var(--lh-body)}
 
 /* Credit and genre search */
 .tool{display:flex;flex-direction:column;gap:var(--stack);margin:var(--section) 0 8px}
@@ -281,7 +284,7 @@ html.mail-open{overflow:hidden} /* no scrollbar while the address cover is up */
   .search-trigger{width:40px;height:40px;padding:0;justify-content:center;border:0;background:none;color:var(--text)}
   .search-trigger span,.search-trigger kbd{display:none}
   .search-trigger .ph{font-size:20px}
-  .contact{height:32px;padding:0 12px;font-size:var(--fs-meta)}
+  .contact{min-width:102px;height:32px;padding:0 12px;font-size:var(--fs-meta)}
   main,.is-home main{padding:24px var(--gutter) 64px}
   .hero{padding:8px 0 32px}
   .hero h1{min-height:3.6em} /* some lines wrap to three on phones; reserve it so the list below doesn't jump */
@@ -315,18 +318,25 @@ html.mail-open{overflow:hidden} /* no scrollbar while the address cover is up */
   ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation-duration:.01ms!important}
 }
 
-/* Language segment: plain labels, the current one underlined in the accent */
-.lang-seg{display:flex;align-items:center;gap:2px;margin-right:4px}
-.lang-seg button{position:relative;height:36px;padding:0 8px;color:var(--muted);font-size:var(--fs-meta);font-weight:500;letter-spacing:.02em;transition:color .15s var(--ease)}
+/* Language segment: plain labels, the current one underlined in the accent; 4px padding puts 8px between labels, the header's own gap */
+.lang-seg{display:flex;align-items:center;margin-right:4px}
+.lang-seg button{position:relative;height:36px;padding:0 4px;color:var(--muted);font-size:var(--fs-meta);font-weight:500;letter-spacing:.02em;transition:color .15s var(--ease)}
 .lang-seg button:hover{color:var(--text)}
 .lang-seg button[aria-pressed=true]{color:var(--accent-ink)}
-.lang-seg button::after{content:'';position:absolute;left:8px;right:8px;bottom:6px;height:2px;border-radius:1px;background:var(--accent);transform:scaleX(0);transition:transform .25s var(--ease)}
+.lang-seg button::after{content:'';position:absolute;left:4px;right:4px;bottom:6px;height:2px;border-radius:1px;background:var(--accent);transform:scaleX(0);transition:transform .25s var(--ease)}
 .lang-seg button[aria-pressed=true]::after{transform:none}
 /* Japanese has no spaces, so keep-all would never wrap a sentence; let it break by character with strict kinsoku */
-html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Pretendard Variable',Pretendard,-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif}
-/* Phones: the header has no room, so the segment moves to the menu and the home footer (the browser language already picks the first one) */
+/* Japanese only. Relative path: the site is served from /release-guide/, so '/fonts/…' would miss.
+   shortcut: the woff2 holds only the glyphs in data.ja.js, faq.ja.js, i18n.js plus kana/ASCII (107KB vs 5MB);
+   a new kanji falls back to Hiragino until re-subset: pyftsubset GenShinGothic-Medium.ttf --text-file=<those files> --unicodes=U+0020-007E,U+3000-30FF,U+FF01-FF9F --flavor=woff2 */
+@font-face{font-family:'Gen Shin Gothic';src:url('fonts/GenShinGothic-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Gen Shin Gothic','Pretendard Variable',Pretendard,'Hiragino Sans',sans-serif;font-weight:500}
+/* Below desktop: the header has no room, so the segment moves to the menu and the home footer (the browser language already picks the first one) */
 .side-footer .lang-seg,.home-footer .lang-seg{display:none}
-@media(max-width:700px){
+@media(max-width:1023px){
   .header-right>.lang-seg{display:none}
-  .side-footer .lang-seg,.home-footer .lang-seg{display:flex;flex-basis:100%;margin:0 0 8px -8px}
+  .side-footer .lang-seg,.home-footer .lang-seg{display:flex;flex-basis:100%;margin:0 0 8px -4px}
 }
+@media(min-width:701px) and (max-width:1023px){.search-trigger{width:200px}} /* JP/EN brand subtitles are longer; 240px overflowed at ~701–730px */
+/* ~320px phones: the JP contact label plus menu overflowed by ~20px; trim the header's side padding and button widths */
+@media(max-width:360px){header{padding-left:8px}.search-trigger,.mobile-menu{width:34px}.contact{min-width:94px;padding:0 8px}}

@@ -1,4 +1,4 @@
-// UI strings per language. Page content lives in data*.js / faq*.js; ja/en are filled from ui.<lang>.json by the build step.
+// UI strings per language. Page content lives in data*.js / faq*.js.
 const I18N={ko:{
  lang:'ko',title:'Audioguys Music 음원 발매 가이드',metaDesc:'음원 발매를 위한 안내',brandSub:'발매 가이드',
  search:'가이드 검색',searchOpen:'검색 열기',close:'닫기',contact:'문의하기',menuOpen:'메뉴 열기',menuClose:'메뉴 닫기',
