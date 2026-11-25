@@ -20,10 +20,10 @@ const DATA_EN = [
    {
     "type": "ul",
     "items": [
-     "Fill out the distribution request form — your contact person will email it to you.",
-     "Profile image (for a new profile or a change)",
+     "Fill out the application form — we will email you the [AUDIOGUY] Distribution Application Form (an Excel spreadsheet) with a link to this guide. It has four tabs: 01_Album/Track Info, 02_Artist Info, 03_AI Use Disclosure and 04_Checklist.",
+     "Artist image (new or updated)",
      "Album artwork image",
-     "Audio files (wav, aiff or flac; at least 24bit/44.1kHz recommended)"
+     "Audio files (WAV, AIFF or FLAC; at least 24-bit/44.1kHz recommended)"
     ]
    },
    {
@@ -35,7 +35,7 @@ const DATA_EN = [
     "type": "ul",
     "items": [
      "Album artwork: at least 3000×3000px (4500×4500px, 300ppi recommended), RGB, JPG or PNG",
-     "Profile image: at least 3000×3000px, RGB, JPG or PNG"
+     "Artist image: at least 3000×3000px, RGB, JPG or PNG"
     ]
    },
    {
@@ -52,22 +52,22 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "Under each platform's policy, the artist or their manager has to claim the artist profile on international platforms directly, from their own account."
+    "text": "Under each platform's policy, the artist or their manager has to claim the artist page on international platforms directly, from their own account."
    },
    {
     "type": "p",
     "level": 2,
-    "text": "If you have released on Apple Music or Spotify before, add your artist page (profile) link to the distribution request form. This helps us match you to the right artist and set up your page correctly."
+    "text": "If you have released on Apple Music or Spotify before, add your artist page link in the 02_Artist Info tab of the [AUDIOGUY] Distribution Application Form. This helps us match you to the right artist and set up your page correctly."
    },
    {
     "type": "link",
-    "text": "See the artist page guide for how to claim your profile",
+    "text": "See the artist page guide for how to claim your artist page",
     "href": "#artist"
    },
    {
     "type": "p",
     "level": 2,
-    "text": "On most international platforms, the artist or manager has to upload the artist profile image themselves. It does not appear automatically just because the release was distributed.",
+    "text": "On most international platforms, the artist or manager has to upload the artist image themselves. It does not appear automatically just because the release was distributed.",
     "tone": "note"
    },
    {
@@ -143,7 +143,7 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "Please submit your files at least 5 weeks before your preferred release date. After reviewing your materials, we schedule the release according to the distributor's calendar. You can work out the preferred date with your contact person."
+    "text": "Please submit your files at least 5 weeks before your preferred release date. After reviewing your materials, we schedule the release according to our distribution schedule. You can discuss your preferred date with your contact person."
    },
    {
     "type": "ul",
@@ -155,7 +155,7 @@ const DATA_EN = [
    {
     "type": "h",
     "level": 3,
-    "text": "If you're doing Dolby Atmos"
+    "text": "If you're releasing in Dolby Atmos"
    },
    {
     "type": "ul",
@@ -234,7 +234,7 @@ const DATA_EN = [
   ]
  },
  {
-  "title": "Claiming your artist profile on international platforms",
+  "title": "Claiming your artist page on international platforms",
   "items": [
    {
     "type": "h",
@@ -244,7 +244,7 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "Check the following before you claim your profile."
+    "text": "Check the following before you claim your artist page."
    },
    {
     "type": "ul",
@@ -279,7 +279,7 @@ const DATA_EN = [
      "Choose Artist or Manager and log in with your Spotify account",
      "Search for your artist name, or paste your Spotify artist link",
      "Enter verification details (social media, website, etc. — the more you add, the faster the approval)",
-     "Submit and wait for approval (usually within a few days)\nNote: you can claim your profile even before release if you have a Spotify Artist URI. AUDIOGUY can look up the URI and send it to you."
+     "Submit and wait for approval (usually within a few days)\nNote: you can claim your artist page even before release if you have a Spotify Artist URI. AUDIOGUY can look up the URI and send it to you."
     ]
    },
    {
@@ -290,7 +290,7 @@ const DATA_EN = [
    {
     "type": "ul",
     "items": [
-     "Change your profile image and bio",
+     "Change your artist image and bio",
      "See streaming stats for your tracks",
      "Pitch new releases for playlists",
      "Upload Canvas (looping music video clips)"
@@ -319,7 +319,7 @@ const DATA_EN = [
      "Go to the URL above or download the app, then log in with your Apple ID",
      "Click [Request Artist Access]",
      "Search for or paste your iTunes Store artist page link",
-     "Verify yourself by choosing one of your own albums\n※ It must be an album where you are the primary artist. You can't claim a profile as a featured artist",
+     "Verify yourself by choosing one of your own albums\n※ It must be an album where you are the primary artist. You can't claim an artist page as a featured artist",
      "Choose your role (Artist / Manager / Label Rep) and enter verification details such as social media or a website",
      "Submit and wait for approval — usually 2–5 business days; you'll get the result by email\nCaution: your tracks must have been live on Apple Music for at least 5 business days before you can request a claim."
     ]
@@ -332,7 +332,7 @@ const DATA_EN = [
    {
     "type": "ul",
     "items": [
-     "Upload a profile image",
+     "Upload a artist image",
      "Write your artist bio and Q&A",
      "See play stats for your tracks"
     ]
@@ -361,7 +361,7 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "How to ask AUDIOGUY to design your album artwork, and what to prepare."
+    "text": "This page explains how to ask AUDIOGUY to design your album artwork and what to prepare."
    },
    {
     "type": "h",
@@ -423,7 +423,7 @@ const DATA_EN = [
      ],
      [
       "Image files",
-      "Images for the artwork (ex: a photo of the artist or group)",
+      "Images for the artwork (e.g., a photo of the artist or group)",
       "High-resolution original files (JPG/PNG)"
      ],
      [
@@ -487,11 +487,11 @@ const DATA_EN = [
    {
     "type": "ol",
     "items": [
-     "Review your AI use: confirm the AI tools, accounts and plans you actually used, when you made the track, and how far AI was used.",
-     "Write the AI disclosure: in the 03_AI 활용 고지 (AI disclosure) section of the distribution request form, state truthfully whether you used AI and how.",
+     "Review your AI use: confirm the AI tools, accounts and plans you actually used, when you made the track, and the scope of AI use.",
+     "Write the AI disclosure: in the 03_AI Use Disclosure tab of the [AUDIOGUY] Distribution Application Form, state truthfully whether you used AI and how.",
      "Write the declaration: fill out the AI Use Declaration (confirmation and declaration for producing and distributing AI-assisted tracks).",
      "Check credits and rights: review each real participant's contribution, the release credits, and your confirmation of third-party rights.",
-     "Submit for review: send the declaration, plus any supporting documents if needed, to your distribution contact along with your distribution request materials."
+     "Submit for review: send the declaration, plus any supporting documents if needed, to your contact person along with your distribution request materials."
     ]
    },
    {
@@ -515,7 +515,7 @@ const DATA_EN = [
      ],
      [
       "AI disclosure",
-      "03_AI 활용 고지 (AI disclosure) in the distribution request form",
+      "03_AI Use Disclosure tab of the [AUDIOGUY] Distribution Application Form",
       "Whether AI was used, where, tool names, etc."
      ],
      [
@@ -524,7 +524,7 @@ const DATA_EN = [
       "Confirms actual use and the facts about rights"
      ],
      [
-      "Credit sheet",
+      "Credits section (03_AI Use Disclosure)",
       "Real contributions: lyrics, composition, arrangement, vocals, performance, editing, mixing, etc.",
       "Keep AI-generated elements separate from real participants' contributions"
      ],
@@ -544,7 +544,7 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "Make sure 03_AI 활용 고지 (AI disclosure), the declaration and the credit sheet all match each other.",
+    "text": "Make sure the 03_AI Use Disclosure tab (including its credits section) and the declaration match each other.",
     "tone": "warn"
    },
    {
@@ -651,7 +651,7 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "Don't credit AI-generated vocals or accompaniment as if a person sang or played them. On the other hand, list every bit of planning, lyric writing, editing, vocals, performance and producing that a person actually did in the credit sheet.",
+    "text": "Don't credit AI-generated vocals or accompaniment as if a person sang or played them. On the other hand, list every bit of planning, lyric writing, editing, vocals, performance and producing that a person actually did in the credits section of the 03_AI Use Disclosure tab.",
     "tone": "warn"
    },
    {
@@ -772,7 +772,7 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "I confirm that my actual production contributions and release credits are recorded truthfully in the separate credit sheet, and that I have not falsely presented AI-generated elements as my own writing, performance or singing.",
+    "text": "I confirm that my actual production contributions and release credits are recorded truthfully in the credits section of the 03_AI Use Disclosure tab, and that I have not falsely presented AI-generated elements as my own writing, performance or singing.",
     "tone": "quote"
    },
    {
@@ -817,13 +817,13 @@ const DATA_EN = [
     "type": "ul",
     "style": "check",
     "items": [
-     "Do the album title, track titles and artist name match the distribution request form?",
+     "Do the album title, track titles and artist name match 01_Album/Track Info in the application form?",
      "Did you check the AI tools, accounts and plans you actually used, and the commercial use and download terms at the time of production?",
      "Did you list every part of production where AI was used, in specific terms?",
-     "Did you record the real participants' contributions and release credits accurately?",
+     "Did you record the human contributors' contributions and release credits accurately?",
      "Did you avoid using other people's music, lyrics, samples, voices, images or text without permission, and avoid copying or imitating a real person's voice?",
-     "Does the information in 03_AI 활용 고지 (AI disclosure), the declaration and the credit sheet all match?",
-     "For songs made by several people, has each participant who needs to written their own declaration?",
+     "Do the 03_AI Use Disclosure tab (including its credits section) and the declaration match?",
+     "For songs made by several people, has every participant who needs one written their own declaration?",
      "Can you show supporting documents if the distributor or a platform asks?"
     ]
    },
@@ -881,7 +881,7 @@ const DATA_EN = [
    {
     "type": "ul",
     "items": [
-     "Where possible, give each contributor's name in both Korean and English.",
+     "Where possible, give each contributor's name both in their own language (e.g. Korean or Japanese) and in English.",
      "To avoid problems with copyright registration and rights handling, we recommend using each contributor's legal name or officially registered stage name.",
      "If one person had several roles, list each role separately.",
      "How credits in the album description actually appear depends on each platform's policy."
@@ -927,12 +927,12 @@ const DATA_EN = [
    {
     "type": "h",
     "level": 2,
-    "text": "Profile image"
+    "text": "Artist image (profile picture)"
    },
    {
     "type": "p",
     "level": 2,
-    "text": "The face photo or image that represents the artist. It appears at the top of the artist profile page on each platform."
+    "text": "The face photo or image that represents the artist. It appears at the top of the artist page on each platform."
    },
    {
     "type": "h",
@@ -942,7 +942,7 @@ const DATA_EN = [
    {
     "type": "p",
     "level": 2,
-    "text": "A dedicated page on a platform for each artist name. It shows the profile image, bio, social media links, full discography and more."
+    "text": "A dedicated page on a platform for each artist name. It shows the artist image, bio, social media links, full discography and more."
    },
    {
     "type": "h",
@@ -951,12 +951,12 @@ const DATA_EN = [
    },
    {
     "type": "p",
-    "text": "The process where the artist or their manager requests and receives admin access to the artist page a platform has created. After claiming, you can edit your profile image and bio yourself."
+    "text": "The process where the artist or their manager requests and receives admin access to the artist page a platform has created. After claiming, you can edit your artist image and bio yourself."
    },
    {
     "type": "h",
     "level": 2,
-    "text": "Primary artist / featured artist (Primary / Featuring)"
+    "text": "Primary artist / featured artist"
    },
    {
     "type": "p",
@@ -1134,7 +1134,7 @@ const DATA_EN = [
    },
    {
     "type": "p",
-    "text": "Adaptation consent is permission you get from the original writer or their publisher to rearrange the song or change or translate its lyrics. The collecting society does not issue it for you, so you have to get it directly from the rights holder."
+    "text": "Adaptation consent is permission you get from the original writer or their publisher to rearrange the song or change or translate its lyrics. A collecting society such as KOMCA does not issue it for you, so you have to get it directly from the rights holder."
    },
    {
     "type": "p",
@@ -1172,7 +1172,7 @@ const DATA_EN = [
    },
    {
     "type": "p",
-    "text": "A document you submit when releasing a track made with generative AI. Its full name is \"Confirmation and declaration for producing and distributing AI-assisted tracks.\" It records the AI tools, accounts and plans used, the scope of AI use, real participants' contributions and your rights confirmation. It must match 03_AI 활용 고지 (AI disclosure) in the distribution request form and the credit sheet."
+    "text": "A document you submit when releasing a track made with generative AI. Its full name is \"Confirmation and declaration for producing and distributing AI-assisted tracks.\" It records the AI tools, accounts and plans used, the scope of AI use, real participants' contributions and your rights confirmation. It must match the 03_AI Use Disclosure tab of the application form, including its credits section."
    },
    {
     "type": "h",
@@ -1187,11 +1187,11 @@ const DATA_EN = [
    {
     "type": "h",
     "level": 2,
-    "text": "Pitching (Pitch)"
+    "text": "Pitching"
    },
    {
     "type": "p",
-    "text": "Promotion where a new track is introduced to platform staff or playlist curators to ask for features or playlist placement. In Korea we pitch directly to promotion staff at platforms such as Melon (Korean DSP). Internationally we pitch through Spotify for Artists, Apple Music for Artists and Naxos NDS Score."
+    "text": "Promotion where a new track is introduced to platform editors or playlist curators to ask for features or playlist placement. Pitches can be proposed through Spotify for Artists and Apple Music for Artists, and to editors at each platform."
    },
    {
     "type": "p",
@@ -1209,7 +1209,7 @@ const DATA_EN = [
    },
    {
     "type": "p",
-    "text": "After you submit the distribution request form, the contract is signed through Modusign (Korean e-signature service)."
+    "text": "After you submit the [AUDIOGUY] Distribution Application Form, the contract is signed through Modusign (Korean e-signature service)."
    },
    {
     "type": "p",
@@ -1244,7 +1244,7 @@ const DATA_EN = [
    },
    {
     "type": "link",
-    "text": "See royalties in the FAQ",
+    "text": "See payout details in the FAQ",
     "href": "#faq"
    }
   ]

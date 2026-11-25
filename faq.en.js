@@ -35,7 +35,7 @@ const FAQ_EN=[
    {
     "q": "Can I move music released through another distributor?",
     "a": [
-     "Yes. Tracks whose previous distribution contract has ended and that can be transferred can be moved to AUDIOGUY. We check the existing release info and whether the contract has ended, then handle the transfer. We also produce spatial audio versions for transferred tracks."
+     "Yes. If your previous distribution contract has ended and the tracks can be transferred, you can move them to AUDIOGUY. We check the existing release info and whether the contract has ended, then handle the transfer. We also produce spatial audio versions for transferred tracks."
     ]
    },
    {
@@ -64,7 +64,7 @@ const FAQ_EN=[
     "q": "Can I register classical or public domain pieces with YouTube Content ID (CID)?",
     "a": [
      "Registration may be rejected or restricted. Content ID (CID) only accepts content you own exclusively or hold an exclusive license for. Public domain works can be used by anyone, so no single rights holder owns them.",
-     "Recordings of the same piece played from the score are almost indistinguishable, so it is also hard for the system to identify the right rights holder. Even a newly recorded exclusive master may be rejected if the piece itself is in the public domain.",
+     "Recordings of the same piece played from the score are almost indistinguishable, so it is also hard for the system to identify the correct rights holder. Even a newly recorded exclusive master may be rejected if the piece itself is in the public domain.",
      "This rule comes from YouTube's policy, so the distributor can't make exceptions."
     ]
    },
@@ -76,7 +76,7 @@ const FAQ_EN=[
       "type": "ul",
       "items": [
        "Public domain: classical, religious songs and hymns, children's songs, holiday songs",
-       "Expired / traditional: recordings with expired copyright, folk songs",
+       "Expired copyright / traditional music: recordings with expired copyright, folk songs",
        "Classical-style originals: original pieces in the style of Bach, Beethoven or Mozart",
        "Non-exclusive content: non-exclusive beats and samples, Creative Commons content",
        "Similar / derivative content: covers, remixes, karaoke",
@@ -108,7 +108,7 @@ const FAQ_EN=[
    {
     "q": "What do I need to submit to request a release?",
     "a": [
-     "Along with our release form, please prepare an album description, audio files, album artwork, an artist bio and profile materials.",
+     "Along with the [AUDIOGUY] Distribution Application Form, please prepare an album description, audio files, album artwork, an artist bio and an artist image.",
      "If the form is hard to fill out, start by sending the tracklist, audio files and album artwork. Your contact person will help you fill in the release info."
     ]
    },
@@ -121,7 +121,7 @@ const FAQ_EN=[
    {
     "q": "What format should my audio files be in?",
     "a": [
-     "Please submit WAV, AIFF or FLAC files. We recommend 24bit/44.1kHz or higher."
+     "Please submit WAV, AIFF or FLAC files. We recommend 24-bit/44.1kHz or higher."
     ]
    },
    {
@@ -234,7 +234,7 @@ const FAQ_EN=[
    {
     "q": "When will I see my first royalties?",
     "a": [
-     "Revenue from Korean platforms shows up in the next royalty quarter after release.",
+     "Revenue from Korean platforms appears in the royalty statement for the quarter after release.",
      "Revenue from international platforms may show up later than Korean revenue, depending on each platform's and distribution partner's settlement schedule. This is a difference in timing, not missing revenue. Statements are added as we receive them."
     ]
    },
@@ -251,8 +251,8 @@ const FAQ_EN=[
      {
       "type": "ul",
       "items": [
-       "Individuals: copy of your ID, copy of your bankbook",
-       "Sole proprietors and companies: copy of your business registration certificate, copy of your bankbook"
+       "Individuals: copy of your ID, copy of your bankbook (bank account details)",
+       "Sole proprietors and companies: copy of your business registration certificate, copy of your bankbook (bank account details)"
       ]
      }
     ]

@@ -1,5 +1,3 @@
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css');
-
 :root{
   --bg:#fafafa;--surface:#fff;--raised:#f4f4f5;--well:#efeff0;
   --line:rgba(23,23,23,.08);--line-strong:rgba(23,23,23,.16);
@@ -38,7 +36,7 @@ header{position:sticky;top:0;z-index:10;height:var(--header);display:flex;align-
 .search-trigger{display:flex;align-items:center;gap:8px;width:240px;height:36px;padding:0 8px 0 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--muted);font-size:var(--fs-ui);transition:border-color .15s var(--ease)}
 .search-trigger:hover{border-color:var(--line-strong)}
 kbd{margin-left:auto;padding:4px 6px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;background:var(--bg);color:var(--muted);font:500 var(--fs-micro)/1 var(--mono)}
-.contact{display:inline-flex;align-items:center;justify-content:center;min-width:116px;height:36px;padding:0 16px;border-radius:8px;background:var(--text);color:#fff;font-size:var(--fs-ui);font-weight:500;white-space:nowrap;transition:background-color .15s var(--ease)}
+.contact{display:inline-flex;align-items:center;justify-content:center;min-width:112px;height:36px;padding:0 16px;border-radius:8px;background:var(--text);color:#fff;font-size:var(--fs-ui);font-weight:500;white-space:nowrap;transition:background-color .15s var(--ease)}
 .contact:hover{background:#3a3a3a}
 /* shortcut: min-width is the widest label (JP お問い合わせ) so switching language doesn't shove the header; re-measure if a label changes */
 .mobile-menu{display:none;width:40px;height:40px;align-items:center;justify-content:center;border-radius:8px;overflow:hidden}
@@ -284,7 +282,7 @@ html.mail-open{overflow:hidden} /* no scrollbar while the address cover is up */
   .search-trigger{width:40px;height:40px;padding:0;justify-content:center;border:0;background:none;color:var(--text)}
   .search-trigger span,.search-trigger kbd{display:none}
   .search-trigger .ph{font-size:20px}
-  .contact{min-width:102px;height:32px;padding:0 12px;font-size:var(--fs-meta)}
+  .contact{min-width:98px;height:32px;padding:0 12px;font-size:var(--fs-meta)}
   main,.is-home main{padding:24px var(--gutter) 64px}
   .hero{padding:8px 0 32px}
   .hero h1{min-height:3.6em} /* some lines wrap to three on phones; reserve it so the list below doesn't jump */
@@ -326,13 +324,9 @@ html.mail-open{overflow:hidden} /* no scrollbar while the address cover is up */
 .lang-seg button::after{content:'';position:absolute;left:4px;right:4px;bottom:6px;height:2px;border-radius:1px;background:var(--accent);transform:scaleX(0);transition:transform .25s var(--ease)}
 .lang-seg button[aria-pressed=true]::after{transform:none}
 /* Japanese has no spaces, so keep-all would never wrap a sentence; let it break by character with strict kinsoku */
-/* Japanese only. Relative path: the site is served from /release-guide/, so '/fonts/…' would miss.
-   shortcut: the woff2 holds only the glyphs in data.ja.js, faq.ja.js, i18n.js plus kana/ASCII (107KB vs 5MB);
-   a new kanji falls back to Hiragino until re-subset: pyftsubset GenShinGothic-Medium.ttf --text-file=<those files> --unicodes=U+0020-007E,U+3000-30FF,U+FF01-FF9F --flavor=woff2 */
-@font-face{font-family:'Gen Shin Gothic';src:url('fonts/GenShinGothic-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;
-  /* Japanese glyphs only (kana, kanji, CJK/full-width punctuation): Latin letters and digits fall through to the usual body font */
-  unicode-range:U+3000-30FF,U+3400-4DBF,U+4E00-9FFF,U+F900-FAFF,U+FF00-FFEF}
-html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Gen Shin Gothic','Pretendard Variable',Pretendard,-apple-system,'Hiragino Sans',sans-serif}
+/* Japanese: Pretendard JP first. It shares Pretendard's Latin design but has full-width 「」、。 (Pretendard's own are narrow);
+   Hangul sheet names fall through to Pretendard */
+html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Pretendard JP Variable','Pretendard JP','Pretendard Variable',Pretendard,-apple-system,'Hiragino Sans',sans-serif}
 /* Below desktop: the header has no room, so the segment moves to the menu and the home footer (the browser language already picks the first one) */
 .side-footer .lang-seg,.home-footer .lang-seg{display:none}
 @media(max-width:1023px){
@@ -341,4 +335,4 @@ html:lang(ja) body{word-break:normal;line-break:strict;font-family:'Gen Shin Got
 }
 @media(min-width:701px) and (max-width:1023px){.search-trigger{width:200px}} /* JP/EN brand subtitles are longer; 240px overflowed at ~701–730px */
 /* ~320px phones: the JP contact label plus menu overflowed by ~20px; trim the header's side padding and button widths */
-@media(max-width:360px){header{padding-left:8px}.search-trigger,.mobile-menu{width:34px}.contact{min-width:94px;padding:0 8px}}
+@media(max-width:360px){header{padding-left:8px}.search-trigger,.mobile-menu{width:34px}.contact{min-width:90px;padding:0 8px}}

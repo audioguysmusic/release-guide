@@ -43,8 +43,9 @@ function setMenu(open){sidebar.classList.toggle('open',open);menuButton.setAttri
 let creditType='Roles';
 
 function navRender(id){nav.innerHTML=navs.map(([key,label,ico])=>`<a href="#${key}"${id===key?' class="active" aria-current="page"':''}><i class="ph ph-${ico}" aria-hidden="true"></i>${label}</a>`).join('')}
-// Form sheet names ("03_AI 활용 고지") get a soft marker so readers can spot them in the form
-const DOC_RE=/\b0\d_(?:AI 활용 고지|[^\s,.()<]+)/g;
+// Form sheet/tab names ("03_AI 활용 고지", "03_AI Use Disclosure") get a soft marker so readers can spot them in the form
+// JP/EN name the tabs of the English application form, which contain spaces and a slash
+const DOC_RE=/\b0\d_(?:AI 활용 고지|Album\/Track Info|Artist Info|AI Use Disclosure|Checklist|[^\s,.()<」]+)/g;
 function linkText(s){return esc(s).replace(DOC_RE,'<mark class="doc">$&</mark>').replace(/(https?:\/\/[^\s<]+)/g,(u)=>`<a class="inline" href="${u}" target="_blank" rel="noopener noreferrer">${u.replace(/^https?:\/\//,'')}</a>`).replace(/ip@audioguyrecords\.com/g,'<a class="inline" href="mailto:ip@audioguyrecords.com">ip@audioguyrecords.com</a>')}
 // "라벨: 내용" gets a bold label; lines after the first become a quiet note under the item
 function liText(s){const [first,...rest]=String(s).split('\n');return linkText(first).replace(/^([^:<]{1,32}):\s/,'<b>$1</b> ')+rest.map(r=>`<span class="li-note">${linkText(r)}</span>`).join('')}
