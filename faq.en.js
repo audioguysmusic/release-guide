@@ -55,7 +55,7 @@ const FAQ_EN=[
    {
     "q": "Can I register AI-made tracks with YouTube Content ID (CID)?",
     "a": [
-     "No. We restrict Content ID (CID) registration for AI tracks.",
+     "No. Under our own policy, we restrict Content ID (CID) registration for AI tracks.",
      "Even if an AI track can be used commercially, it must be checked separately whether you hold exclusive rights to it. Content ID automatically matches uploaded videos against registered audio, so registering a track with unclear rights can lead to wrongful claims or revenue disputes. We restrict registration as a precaution, so rights holders don't get caught up in unexpected objections or disputes.",
      "For the YouTube Shorts music library, we pass along whether the track is AI-generated together with the supporting documents. However, actual listing and search visibility depend on YouTube's policy and review, so we can't guarantee them."
     ]
@@ -65,7 +65,7 @@ const FAQ_EN=[
     "a": [
      "Registration may be rejected or restricted. Content ID (CID) only accepts content you own exclusively or hold an exclusive license for. Public domain works can be used by anyone, so no single rights holder owns them.",
      "Recordings of the same piece played from the score are almost indistinguishable, so it is also hard for the system to identify the correct rights holder. Even a newly recorded exclusive master may be rejected if the piece itself is in the public domain.",
-     "This rule comes from YouTube's policy, so the distributor can't make exceptions."
+     "Because YouTube's policy makes these hard to register, the distributor generally can't make exceptions."
     ]
    },
    {
@@ -83,7 +83,7 @@ const FAQ_EN=[
        "Functional music: meditation, yoga and sleep music, narration, ringtones"
       ]
      },
-     "Classical-style originals are also excluded, because they sound similar to public domain works and can lead to false claims or revenue disputes."
+     "Classical-style originals are also excluded under our own policy (not a YouTube rule), because they sound similar to public domain works and can lead to false claims or revenue disputes."
     ]
    },
    {
@@ -127,7 +127,7 @@ const FAQ_EN=[
    {
     "q": "What specs should my album artwork (cover image) meet?",
     "a": [
-     "Please prepare an RGB image of at least 3000×3000px and 150ppi. We recommend 4500×4500px at 300ppi, in JPG or PNG format."
+     "Please prepare an RGB image of at least 3000×3000px. We recommend 4500×4500px, in JPG or PNG format."
     ]
    },
    {
@@ -277,7 +277,7 @@ const FAQ_EN=[
    {
     "q": "Does signing a distribution contract transfer the rights to my tracks?",
     "a": [
-     "The master rights to your existing tracks stay with you, the rights holder. However, the master rights to the spatial audio versions AUDIOGUY produces belong to the company.",
+     "The master rights to your existing tracks stay with you, the rights holder. However, the master rights to the spatial audio versions AUDIOGUY produces belong to the company. Details are governed by your contract.",
      "Revenue from the spatial audio versions is paid to the rights holder at the same royalty rate."
     ]
    },
@@ -304,7 +304,7 @@ const FAQ_EN=[
    {
     "q": "Can I submit music made with AI?",
     "a": [
-     "Yes. If you disclose your AI use when requesting the release and submit the declaration and supporting documents, we can distribute it. Depending on streaming platform policies, an AI-use label may be shown."
+     "Yes. You can request distribution by disclosing your AI use when requesting the release and submitting the declaration and supporting documents. Whether it is distributed depends on our review and platform policies. Depending on streaming platform policies, an AI-use label may be shown."
     ]
    }
   ]

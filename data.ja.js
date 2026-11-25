@@ -34,7 +34,7 @@ const DATA_JA = [
    {
     "type": "ul",
     "items": [
-     "アルバムアートワーク: 3000×3000px以上（推奨4500×4500px、300ppi）、RGB、JPGまたはPNG形式",
+     "アルバムアートワーク: 3000×3000px以上（推奨4500×4500px）、RGB、JPGまたはPNG形式",
      "アーティスト画像: 3000×3000px以上、RGB、JPGまたはPNG形式"
     ]
    },
@@ -79,7 +79,7 @@ const DATA_JA = [
     "type": "ul",
     "items": [
      "メタデータは原則として、国内（韓国）プラットフォームでは韓国語、グローバルプラットフォームでは英語で登録されます。",
-     "Apple Musicを除くほとんどの海外プラットフォームは、アーティスト名やメタデータのローカライズ表記に対応していません。",
+     "海外プラットフォームの多くは、アーティスト名やメタデータのローカライズ表記への対応が限られており、反映されるかどうかも一定ではありません。",
      "Apple Musicでは一部のローカライズ表記を適用できます。ただし、プラットフォームの規定により反映されない場合があります。"
     ]
    },
@@ -278,8 +278,8 @@ const DATA_JA = [
      "上記のアドレスにアクセスし、[Get Access]をクリック",
      "「Artist or Manager」を選び、Spotifyアカウントでログイン",
      "検索欄にアーティスト名を入力するか、Spotifyのアーティストリンクを貼り付け",
-     "本人確認情報を入力（SNSアカウント、ウェブサイトなど。多いほど承認が早くなります）",
-     "提出後、承認を待ちます（通常は数日以内）\n参考: リリース前でも、Spotify Artist URIがあれば事前に認証申請できます。URIはAUDIOGUYで確認してお伝えできます。"
+     "本人確認情報を入力（SNSアカウント、ウェブサイトなど。多いほど確認に役立ちます）",
+     "提出後、承認を待ちます（期間はSpotifyの審査によって異なります）\n参考: リリース前でも、Spotify Artist URIがあれば事前に認証申請できます。URIはAUDIOGUYで確認してお伝えできます。"
     ]
    },
    {
@@ -320,8 +320,8 @@ const DATA_JA = [
      "[Request Artist Access]をクリック",
      "iTunes Storeのアーティストページのリンクを検索、または貼り付け",
      "本人がリリースしたアルバムを1つ選んで本人確認\n※メインアーティスト（Primary Artist）として登録されたアルバムに限ります。フィーチャリングアーティストとしては認証申請できません。",
-     "役割（Artist／Manager／Label Rep）を選び、SNSやウェブサイトなどの確認情報を入力",
-     "提出後、承認を待ちます。通常2〜5営業日かかり、結果はメールで届きます。\n注意: 楽曲がApple Musicに5営業日以上掲載されていないと、認証申請はできません。"
+     "役割（Artist／Manager／Label Rep）を選び、SNSやウェブサイトなどの確認情報を入力（Appleの案内では、直接認証申請できるのはアーティスト本人またはマネージャーのみ）",
+     "提出後、承認を待ちます。期間はAppleの審査によって異なり、結果はメールで届きます。\n注意: 楽曲がApple Musicに5営業日以上掲載されていないと、認証申請はできません。"
     ]
    },
    {
@@ -333,7 +333,7 @@ const DATA_JA = [
     "type": "ul",
     "items": [
      "アーティスト画像のアップロード",
-     "アーティストのバイオとQ&Aの作成",
+     "出身地などのアーティスト情報の入力",
      "楽曲の再生統計の確認"
     ]
    },
@@ -592,7 +592,7 @@ const DATA_JA = [
    {
     "type": "p",
     "level": 2,
-    "text": "アカウントのパスワード、カード番号、住民登録番号（韓国の個人識別番号）など、不要な個人情報は記入・提出しないでください。いただいた資料は、権利確認のための社内資料としてのみ管理します。",
+    "text": "アカウントのパスワード、カード番号、住民登録番号（韓国の個人識別番号）など、不要な個人情報は記入・提出しないでください。いただいた資料は、権利確認と配信審査の目的にのみ使用し、必要な範囲で配信パートナーやプラットフォームに提供することがあります。",
     "tone": "warn"
    },
    {
@@ -707,7 +707,7 @@ const DATA_JA = [
    {
     "type": "p",
     "level": 2,
-    "text": "申告書には、次の内容を含めることをおすすめします。"
+    "text": "AIを利用した場合は、申告書に次の内容を必ず含めてください。"
    },
    {
     "type": "h",
@@ -914,7 +914,7 @@ const DATA_JA = [
      [
       "Accordion\nAcoustic Baritone Guitar\nAcoustic Bass Guitar\nAcoustic Fretless Guitar\nAcoustic Guitar\nAcoustic Rhythm Guitar\nAcoustic Slide Guitar\nAfrican Percussion\nAll Instruments\nAlphorn\nAlto Clarinet\nAlto Flute\nAlto Guitar\nAlto Horn\nAlto Lute\nAlto Recorder\nAlto Saxophone\nAlto Tenor Vocals\nAlto Trombone\nAlto Viol\nAlto Viola\nAlto Viola da Gamba\nAlto Violin\nAlto Vocals\nAlto Zither\nAppalachian Dulcimer\nArchlute\nARP Synthesizer\nAutoharp\nBaby Bass\nBackground Vocals\nBaglama\nBagpipes\nBajo Quinto\nBajo Sexto\nBalafon\nBalalaika\nBamboo Flute\nBamboo Saxophone\nBandola\nBandoneon\nBandura\nBandurria\nBanjo\nBanjolin\nBansuri\nBarbat\nBaritone Guitar\nBaritone Horn\nBaritone Saxophone\nBaritone Trombone\nBaritone Violin\nBaritone Vocals\nBaroque Alto Trombone\nBaroque Bassoon\nBaroque Bassoon Ensemble\nBaroque Bass Trombone\nBaroque Brass Ensemble\nBaroque Cello\nBaroque Chamber Orchestra\nBaroque Choir\nBaroque Flute\nBaroque Guitar\nBaroque Harp\nBaroque Lute\nBaroque Oboe\nBaroque Recorder\nBaroque Trumpet\nBaroque Viola\nBaroque Violin\nBarrel Organ\nBaryton\nBass\nBasset Clarinet\nBasset Horn\nBasset Recorder\nBassoon\nBass Banjo\nBass-Baritone Vocals\nBass Clarinet\nBass Drum\nBass Flute\nBass Flute-A-Bec\nBass Guitar\nBass Harmonica\nBass Harp\nBass Horn\nBass Lute\nBass Marimba\nBass Oboe\nBass Recorder\nBass Saxophone\nBass Synthesizer\nBass Trombone\nBass Trumpet\nBass Viola Da Gamba\nBass Violin\nBass Vocals\nBatá Drums\nBayan\nBeats\nBeat Boxing\nBells\nBendir\nBerimbau\nB-Flat Clarinet\nBirbyne\nBiwa\nBodhrán Drum\nBonang\nBongos\nBouzouki\nBoys' Choir\nBoy Soprano Vocals\nBrass\nBrass Instrument\nBugle\nBukkehorn\nButton Accordion\nByzantine Lyra\nCabasa\nCajon\nCajun Fiddle\nCalliope\nCarillon\nCastanets\nCavaquinho\nCaxixi\nCelesta\nCeleste\nCello\nCeltic Flute\nCeltic Harp\nChalumeau\nChamberlain Strings\nChamberlin\nChamber Organ\nChant Vocals\nChapman Stick\nCharango\nChekere\nChest Organ",
       "Children's Vocals\nChimes\nChinese Flute\nChitarrone\nChromatic Harmonica\nCimbalom\nCittern\nClaps\nClap Stick\nClarinet\nClassical Guitar\nClaves\nClavichord\nClavier\nClavinet\nConcertina\nConcert Harp\nConch Shells\nCongas\nContrabass\nContrabassoon\nContrabass Clarinet\nContrabass Flute\nContrabass Recorder\nContrabass Sarrusophone\nContrabass Saxophone\nContrabass Trombone\nContralto Clarinet\nContralto Vocals\nCornet\nCornett\nCornetto\nCorno da Caccia\nCoro\nCounter Tenor\nCounter-Tenor Vocals\nCowbell\nCrotales\nCrumhorn\nCuatro\nCuatro Venezolano\nCuesnophone\nCuica\nCurtal\nCymbals\nC-Melody Sax\nC-Melody Saxophone\nDaf\nDan Tranh\nDarbuka\nDaxophone\nDhol\nDiddley Bow\nDidgeridoo\nDilruba\nDizi\nDjembe\nDobro\nDobro Guitar\nDojo\nDomra\nDouble Bass\nDouble Flute\nDouble Recorder\nDoumbek\nDrums\nDrum Machine\nDuduk\nDulcian\nDulcimer\nDutar\nEarly Music Instrument\n8-String Bass Guitar\n8-String Guitar\nElectric Banjo\nElectric Bass Guitar\nElectric Cello\nElectric Fretless Guitar\nElectric Guitar\nElectric Mandolin\nElectric Piano\nElectric Sitar\nElectric Upright Bass\nElectric Viola\nElectric Violin\nElectronics\nElectronic Instrument\nElectronic Percussion\nElectronic Valve Instrument\nElectronic Wind Instrument\n11-String Guitar\nEnglish Horn\nErhu\nEuphonium\nE-Bow\nFairlight CMI\nFarfisa\nFender Rhodes\nFiddle\nFife\nFinger Cymbals\nFinger Snaps\n5-String Banjo\n5-String Bass Guitar\nFlageolet\nFlamenco Cajón\nFlamenco Guitar\nFlugelhorn\nFlute\nFoot Stomping\nFortepiano\n4-String Banjo\n4-String Guitar\nFrame Drum\nFrench Horn\nFretless Bass Guitar\nFretless Guitar\nFujara\nFunde\nFuzz Guitar\nGadulka\nGamelan\nGendèr\nGhatam\nGitern\nGittern\nGlass Harmonica\nGlockenspiel\nGong\nGothic Harp\nGreat Bass Recorder\nGüícharo\nGüiro\nGuitar\nGuitarron\nGuitars\nGuitar Synthesizer\nGut String Guitar\nHaegeum\nHag'houge\nHammered Dulcimer\nHammond Organ\nHandclaps\nHang\nHardanger Fiddle\nHardingfele\nHarmonica\nHarmonium\nHarmony Vocals\nHarp\nHarpsichord\nHawaiian Guitar\nHeckelphone\nHerald Trumpet\nHichiriki\nHigh Tenor Vocals\nHistorical Bassoon\nHistorical Guitar\nHistorical Harp\nHi-Hat\nHi-String Guitar\nHorns\nHorn Section\nHurdy Gurdy\nIndian Flute\nInstrument\nIrish Flute\nIrish Whistle\nJapanese Flute\nJaw Harp\nKalimba\nKamancheh\nKantele\nKanun\nKarkaba\nKaval\nKazoo\nKendang\nKenong/Kethuk\nKeyboards\nKeyboard Bass\nKeyboard Instrument\nKeyboard Synth\nKeytar\nKhene\nKora\nKoto\nKugo\nLap Cello\nLap Slide Guitar\nLap Steel Guitar\nLautenwerck\nLeaf\nLirone\nLoops\nLowrey Organ\nLow Whistle\nLute\nLyra Viol\nLyre\nLyricon\nMandocello\nMandola\nMandolin\nManzello\nMaracas\nMarimba\nMbira\nMedieval Flute\nMedieval Harp\nMellophone\nMellophonium\nMellotron\nMelodeon\nMelodica\nMetallophone\nMezzo-Soprano Vocals\nMezzo Violin\nModular Synth\nMong\nMoog\nMouth Organ\nMridangam\nMusette\nMusical Saw\nMuted Trombone\nMuted Trumpet\nNative American Flute\nNatural Horn\nNey\n9-String Guitar\nNoises\nNyckelharpa\nNylon-String Guitar\nOboe\nOboe D'Amore\nOboe Da Caccia\nOcarina\nOmnichord\nOndes Martenot\nOphicleide\nOrgan\nOrganetto\nOrgan Pedals\nOther Brass Instrument\nOther Instrument\nOther Keyboard Instrument\nOther Percussion Instrument\nOther String Instrument\nOther Wind Instrument\nOther Woodwind Instrument\nOud\nPaetzold Contrabass Recorder",
-      "Pakhavaj\nPalmas\nPandeiro\nPanderos\nPanpipes\nPan Flute\nPardessus de Viole\nParlor Guitar\nParlour Guitar\nPedal Steel Guitar\nPeking\nPenny Whistle\nPercussion\nPercussion Instrument\nPiano\nPiccolo\nPiccolo Bass\nPiccolo Flute\nPiccolo Oboe\nPiccolo Trumpet\nPikasa Guitar\nPipa\nPipe\nPipes\nPipe Organ\nPocket Trumpet\nPortuguese Guitar\nPositive Organ\nPost Horn\nPrepared Piano\nPrimera Voz\nPsaltery\nPump Organ\nRebab\nRebec\nRecorder\nReeds\nReed Organ\nRenaissance Flute\nRenaissance Guitar\nRepeater Drum\nRequinto Guitar\nRequinto Jarocho\nResonator Guitar\nRhodes Piano\nRhythm Guitar\nRomantic Guitar\nRussian Guitar\nSabar Ensemble\nSackbut\nSampler\nSantoor\nSantur\nSarangi\nSarod\nSaron\nSarrusophone\nSaxello\nSaxophone\nSaz\nScratches\nScreams\nSegunda Voz\nSerpent\n7-String Banjo\n7-String Bass Guitar\n7-String Guitar\nShaker\nShakers\nShakuhachi\nShamisen\nShawm\nShehnai\nShekere\nShenai\nSheng\nShō\nShouts\nSistrum\nSitar\n6-String Banjo\n6-String Bass Guitar\nSleigh Bells\nSlenthem\nSlide Guitar\nSlide Saxophone\nSlide Trumpet\nSlide Whistle\nSnare Drum\nSopilka\nSopranino Clarinet\nSopranino Recorder\nSopranino Saxophone\nSoprano\nSoprano Clarinet\nSoprano Cornet\nSoprano Flute\nSoprano Recorder\nSoprano Saxophone\nSoprano Trombone\nSoprano Viola da Gamba\nSoprano Violin\nSoprano Vocals\nSousaphone\nSpanish Guitar\nSpinet\nSpoons\nSteel Drum\nSteel Drums\nSteel Guitar\nStreichmelodion\nStrings\nString Instrument\nStritch\nStroh Violin\nStylophone\nSurbahar\nSurdo\nSynclavier\nSynthesizer\nSynth Bass\nSynth Guitar\nSynth Pads\nSynth Percussion\nSynth Strings\nTabla\nTabor\nTabor Pipe\nTack Piano\nTafelklavier\nTaiko Drums\nTalkbox\nTalking Drum\nTamborim\nTamboura\nTambourine\nTanbur\nTanpura\nTaonga Pūoro\nTar\nTarogato\nTemple Blocks\nTenor Banjo\nTenor Drum\nTenor Drums\nTenor Guitar\nTenor Horn\nTenor Recorder\nTenor Sackbut\nTenor Saxophone\nTenor Trombone\nTenor Viol\nTenor Viola da Gamba\nTenor Violin\nTenor Vocals\n10-String Bass Guitar\n10-String Guitar\nThavil\nTheorbo\nTheremin\nTibetan Bowls\nTimbales\nTimpani\nTin Whistle\nToasting\nTom-Toms\nToy Piano\nTransverse Flute\nTrautonium\nTraverso\nTreble Recorder\nTreble Viol\nTreble Viola da Gamba\nTreble Violin\nTreble Vocals\nTres\nTriangle\nTrombone\nTrombonium\nTrumpet\nTuba\nTubular Bells\nTurntable\nTurntables\n12-String Acoustic Guitar\n12-String Bass Guitar\n12-String Electric Guitar\n12-String Fiddle\n12-String Guitar\nTxistu\nRcyslpnq\nUdu\nUilleann Pipes\nUkulele\nUpright Bass\nUpright Piano\nValve Trombone\nVeena\nVibes\nVibraphone\nVibraslap\nVielle\nVihuela\nViol\nViola\nViola D’Amore\nViola Da Gamba\nViola Quartet\nVioletta\nViolin\nVioloncello\nViolone\nViolone Grosso\nViol Consort\nVirginal\nVocaloid\nVocals\nVocoder\nWashboard\nWhistle\nWind Chimes\nWind Instrument\nWoodwinds\nWoodwind Instrument\nWood Block\nWood Flute\nWood Recorder\nWood Whistle\nWurlitzer\nWurlitzer Piano\nXylophone\nXylorimba\nYouth Choir\nZarb\nZither"
+      "Pakhavaj\nPalmas\nPandeiro\nPanderos\nPanpipes\nPan Flute\nPardessus de Viole\nParlor Guitar\nParlour Guitar\nPedal Steel Guitar\nPeking\nPenny Whistle\nPercussion\nPercussion Instrument\nPiano\nPiccolo\nPiccolo Bass\nPiccolo Flute\nPiccolo Oboe\nPiccolo Trumpet\nPikasa Guitar\nPipa\nPipe\nPipes\nPipe Organ\nPocket Trumpet\nPortuguese Guitar\nPositive Organ\nPost Horn\nPrepared Piano\nPrimera Voz\nPsaltery\nPump Organ\nRebab\nRebec\nRecorder\nReeds\nReed Organ\nRenaissance Flute\nRenaissance Guitar\nRepeater Drum\nRequinto Guitar\nRequinto Jarocho\nResonator Guitar\nRhodes Piano\nRhythm Guitar\nRomantic Guitar\nRussian Guitar\nSabar Ensemble\nSackbut\nSampler\nSantoor\nSantur\nSarangi\nSarod\nSaron\nSarrusophone\nSaxello\nSaxophone\nSaz\nScratches\nScreams\nSegunda Voz\nSerpent\n7-String Banjo\n7-String Bass Guitar\n7-String Guitar\nShaker\nShakers\nShakuhachi\nShamisen\nShawm\nShehnai\nShekere\nShenai\nSheng\nShō\nShouts\nSistrum\nSitar\n6-String Banjo\n6-String Bass Guitar\nSleigh Bells\nSlenthem\nSlide Guitar\nSlide Saxophone\nSlide Trumpet\nSlide Whistle\nSnare Drum\nSopilka\nSopranino Clarinet\nSopranino Recorder\nSopranino Saxophone\nSoprano\nSoprano Clarinet\nSoprano Cornet\nSoprano Flute\nSoprano Recorder\nSoprano Saxophone\nSoprano Trombone\nSoprano Viola da Gamba\nSoprano Violin\nSoprano Vocals\nSousaphone\nSpanish Guitar\nSpinet\nSpoons\nSteel Drum\nSteel Drums\nSteel Guitar\nStreichmelodion\nStrings\nString Instrument\nStritch\nStroh Violin\nStylophone\nSurbahar\nSurdo\nSynclavier\nSynthesizer\nSynth Bass\nSynth Guitar\nSynth Pads\nSynth Percussion\nSynth Strings\nTabla\nTabor\nTabor Pipe\nTack Piano\nTafelklavier\nTaiko Drums\nTalkbox\nTalking Drum\nTamborim\nTamboura\nTambourine\nTanbur\nTanpura\nTaonga Pūoro\nTar\nTarogato\nTemple Blocks\nTenor Banjo\nTenor Drum\nTenor Drums\nTenor Guitar\nTenor Horn\nTenor Recorder\nTenor Sackbut\nTenor Saxophone\nTenor Trombone\nTenor Viol\nTenor Viola da Gamba\nTenor Violin\nTenor Vocals\n10-String Bass Guitar\n10-String Guitar\nThavil\nTheorbo\nTheremin\nTibetan Bowls\nTimbales\nTimpani\nTin Whistle\nToasting\nTom-Toms\nToy Piano\nTransverse Flute\nTrautonium\nTraverso\nTreble Recorder\nTreble Viol\nTreble Viola da Gamba\nTreble Violin\nTreble Vocals\nTres\nTriangle\nTrombone\nTrombonium\nTrumpet\nTuba\nTubular Bells\nTurntable\nTurntables\n12-String Acoustic Guitar\n12-String Bass Guitar\n12-String Electric Guitar\n12-String Fiddle\n12-String Guitar\nTxistu\nUdu\nUilleann Pipes\nUkulele\nUpright Bass\nUpright Piano\nValve Trombone\nVeena\nVibes\nVibraphone\nVibraslap\nVielle\nVihuela\nViol\nViola\nViola D’Amore\nViola Da Gamba\nViola Quartet\nVioletta\nViolin\nVioloncello\nViolone\nViolone Grosso\nViol Consort\nVirginal\nVocaloid\nVocals\nVocoder\nWashboard\nWhistle\nWind Chimes\nWind Instrument\nWoodwinds\nWoodwind Instrument\nWood Block\nWood Flute\nWood Recorder\nWood Whistle\nWurlitzer\nWurlitzer Piano\nXylophone\nXylorimba\nYouth Choir\nZarb\nZither"
      ]
     ],
     "text": ""
@@ -1125,7 +1125,7 @@ const DATA_JA = [
    },
    {
     "type": "p",
-    "text": "原曲をそのままカバーする場合でも、利用許諾が必要です。編曲や歌詞の変更をする場合は、改変同意書も必要です。韓国以外の曲（日本の曲を含む）は、韓国国内のサブパブリッシャーや海外のメカニカルライセンス（mechanical license）を通す必要があり、時間が多くかかることがあります。書類がそろってからリリース日程を決めるのが安全です。"
+    "text": "一般的に、原曲をそのままカバーする場合でも、利用許諾が必要です。編曲や歌詞の変更をする場合は、改変同意書も必要です。韓国以外の曲（日本の曲を含む）は、韓国国内のサブパブリッシャーや海外のメカニカルライセンス（mechanical license）を通す必要があり、時間が多くかかることがあります。書類がそろってからリリース日程を決めるのが安全です。具体的なケースは、権利者やKOMCAに確認してください。"
    },
    {
     "type": "h",
@@ -1163,7 +1163,7 @@ const DATA_JA = [
    },
    {
     "type": "p",
-    "text": "KOMCAは2025年3月から、AIの寄与が0%の曲だけを登録対象としていました。しかし、2026年8月にこの方針を変更しました。現在は、人が実質的かつ主体的に創作に寄与していれば、AIを利用した曲も登録できます。創作過程の資料を求められた場合は提出が必要です。虚偽の申告をすると、制裁を受けることがあります。"
+    "text": "KOMCAは2025年3月から、AIを利用した曲の登録を保留しています。2026年8月に、人が実質的かつ主体的に創作した部分は登録できるという基準を発表しましたが、同じ月に撤回し、現在は新しい基準を検討しています（2026年11月時点）。自作曲にAIを利用した場合は、登録できるかどうかを事前にKOMCAに確認してください。"
    },
    {
     "type": "h",
@@ -1191,7 +1191,7 @@ const DATA_JA = [
    },
    {
     "type": "p",
-    "text": "新しい楽曲をプラットフォームのエディターやプレイリストのキュレーターに紹介し、おすすめやプレイリストへの収録を依頼するプロモーション活動です。Spotify for Artists、Apple Music for Artistsをはじめ、各プラットフォームのエディターにピッチングを提案できます。"
+    "text": "新しい楽曲をプラットフォームのエディターやプレイリストのキュレーターに紹介し、おすすめやプレイリストへの収録を依頼するプロモーション活動です。Spotify for Artistsからは直接ピッチングでき、Apple Musicをはじめ各プラットフォームのエディターには、ディストリビューターを通じてピッチングを提案できます。"
    },
    {
     "type": "p",
