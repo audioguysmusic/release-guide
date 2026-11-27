@@ -235,7 +235,19 @@ const FAQ_EN=[
     "q": "When will I see my first royalties?",
     "a": [
      "Revenue from Korean platforms appears in the royalty statement for the quarter after release.",
-     "Revenue from international platforms may show up later than Korean revenue, depending on each platform's and distribution partner's settlement schedule. This is a difference in timing, not missing revenue. Statements are added as we receive them."
+     "Revenue from international platforms may show up later than Korean revenue, depending on each platform's and distribution partner's settlement schedule. This is a difference in timing, not missing revenue. See \"Royalty timing\" in the Royalties guide for details."
+    ]
+   },
+   {
+    "q": "Why doesn't revenue from the month my music was played show up on my statement right away?",
+    "a": [
+     "The platform may not have reported it yet. Revenue passes through platforms and distribution partners before it reaches you, so there is a gap between when your music is played and when it appears on a statement. Check whether it shows up on your next statement."
+    ]
+   },
+   {
+    "q": "Why does my statement include usage from earlier months?",
+    "a": [
+     "Figures that a platform or distribution partner reported late have been added to this statement. Check your statement by the usage period."
     ]
    },
    {
@@ -267,6 +279,12 @@ const FAQ_EN=[
     "q": "Where can I see my royalty statements?",
     "a": [
      "In Audioguys for Artists. Each rights holder logs in to see monthly royalty trends and performance by period and by platform."
+    ]
+   },
+   {
+    "q": "Who do I contact if something on my statement looks wrong?",
+    "a": [
+     "Send your contact person the album title, usage period and platform, and we'll look into it."
     ]
    }
   ]

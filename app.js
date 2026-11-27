@@ -46,7 +46,9 @@ function navRender(id){nav.innerHTML=navs.map(([key,label,ico])=>`<a href="#${ke
 // Form sheet/tab names ("03_AI 활용 고지", "03_AI Use Disclosure") get a soft marker so readers can spot them in the form
 // JP/EN name the tabs of the English application form, which contain spaces and a slash
 const DOC_RE=/\b0\d_(?:AI 활용 고지|Album\/Track Info|Artist Info|AI Use Disclosure|Checklist|[^\s,.()<」]+)/g;
-function linkText(s){return esc(s).replace(DOC_RE,'<mark class="doc">$&</mark>').replace(/(https?:\/\/[^\s<]+)/g,(u)=>`<a class="inline" href="${u}" target="_blank" rel="noopener noreferrer">${u.replace(/^https?:\/\//,'')}</a>`).replace(/ip@audioguyrecords\.com/g,'<a class="inline" href="mailto:ip@audioguyrecords.com">ip@audioguyrecords.com</a>')}
+const ARROW={right:'M3 8h10M9 4l4 4-4 4',ext:'M5 11l6-6M6 5h5v5'};
+const arrow=k=>`<svg class="link-arrow ${k}" viewBox="0 0 16 16" aria-hidden="true"><path d="${ARROW[k]}" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+function linkText(s){return esc(s).replace(DOC_RE,'<mark class="doc">$&</mark>').replace(/(https?:\/\/[^\s<]+)/g,(u)=>`<a class="inline" href="${u}" target="_blank" rel="noopener noreferrer">${u.replace(/^https?:\/\//,'')}${arrow('ext')}</a>`).replace(/ip@audioguyrecords\.com/g,'<a class="inline" href="mailto:ip@audioguyrecords.com">ip@audioguyrecords.com</a>')}
 // "라벨: 내용" gets a bold label; lines after the first become a quiet note under the item
 function liText(s){const [first,...rest]=String(s).split('\n');return linkText(first).replace(/^([^:<]{1,32}):\s/,'<b>$1</b> ')+rest.map(r=>`<span class="li-note">${linkText(r)}</span>`).join('')}
 const li=i=>typeof i==='string'?`<li>${liText(i)}</li>`:`<li>${liText(i.text)}<ul>${i.items.map(li).join('')}</ul></li>`;
@@ -55,7 +57,7 @@ function renderItem(x){
  if(x.style==='check')return `<ul class="check">${x.items.map(i=>`<li><label><input type="checkbox"><span>${liText(i)}</span></label></li>`).join('')}</ul>`;
  if(x.type==='ul'||x.type==='ol')return `<${x.type}${x.style?` class="${x.style}"`:''}>${x.items.map(li).join('')}</${x.type}>`;
  if(x.type==='buttons')return `<div class="social-links">${x.items.map(b=>`<a class="social-btn" href="${b.href}" target="_blank" rel="noopener noreferrer"><i class="ph ph-${b.icon}" aria-hidden="true"></i><span><b>${esc(b.text)}</b><small>${esc(b.handle)}</small></span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>`).join('')}</div>`;
- if(x.type==='link'){const ext=x.href.startsWith('http');return `<p><a class="text-link" href="${x.href}"${ext?' target="_blank" rel="noopener noreferrer"':''}>${esc(x.text)}<i class="ph ph-arrow-${ext?'up-right':'right'}" aria-hidden="true"></i></a></p>`}
+ if(x.type==='link'){const ext=x.href.startsWith('http');return `<p><a class="text-link" href="${x.href}"${ext?' target="_blank" rel="noopener noreferrer"':''}>${esc(x.text)}${arrow(ext?'ext':'right')}</a></p>`}
  if(x.type==='table'){
   if(x.rows.length===1&&x.rows[0].length===1)return `<pre class="example">${esc(x.rows[0][0])}</pre>`;
   const [head,...body]=x.rows;
@@ -73,7 +75,7 @@ function getItems(id){
 }
 function renderSections(items){let html='',open=false;for(const x of items){if(x.type==='h'&&x.level===2){if(open)html+='</div></details>';html+=`<details class="guide-accordion"><summary><h2>${esc(x.text)}</h2><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">`;open=true}else html+=renderItem(x)}return html+(open?'</div></details>':'')}
 const faqAnswer=f=>f.a.map(a=>typeof a==='string'?{type:'p',text:a}:a);
-const renderFaq=()=>FAQ_L.map(g=>`<section class="faq-group"><h2>${esc(g.cat)}</h2>${g.items.map(f=>`<details class="guide-accordion" id="${f.id}"><summary><h3>${esc(f.q)}</h3><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">${faqAnswer(f).map(renderItem).join('')}</div></details>`).join('')}</section>`).join('');
+const renderFaq=()=>FAQ_L.map((g,gi)=>`<section class="faq-group" id="faq-cat-${gi+1}"><h2>${esc(g.cat)}</h2>${g.items.map(f=>`<details class="guide-accordion" id="${f.id}"><summary><h3>${esc(f.q)}</h3><i class="ph ph-plus" aria-hidden="true"></i></summary><div class="accordion-body">${faqAnswer(f).map(renderItem).join('')}</div></details>`).join('')}</section>`).join('');
 // one <div> per term, so a term with several paragraphs keeps a single divider under it
 const renderGlossary=items=>'<dl class="glossary">'+items.map((x,i)=>x.type==='h'?`${i?'</div>':''}<div class="term"><dt>${esc(x.text)}</dt>`:`<dd>${linkText(x.text)}</dd>`).join('')+'</div></dl>';
 
@@ -147,7 +149,33 @@ function render(){
  if(id==='credits'){creditType='Roles';creditsExpanded=false;document.querySelector('#creditMore').onclick=()=>{creditsExpanded=!creditsExpanded;renderCredits()};document.querySelectorAll('[data-kind]').forEach(b=>b.onclick=()=>{creditType=b.dataset.kind;creditsExpanded=false;document.querySelectorAll('[data-kind]').forEach(x=>{x.classList.toggle('active',x===b);x.setAttribute('aria-pressed',x===b)});renderCredits()});document.querySelector('#creditSearch').oninput=()=>renderCredits(false);renderCredits()}
  window.scrollTo(0,0);main.querySelector('h1').focus({preventScroll:true});
  const target=id==='faq'&&document.getElementById(hash);
- if(target){showOpen(target);target.scrollIntoView()}else if(id!=='faq'&&id!=='credits')showOpen(main.querySelector('.guide-accordion'));
+ if(target){if(target.tagName==='DETAILS')showOpen(target);target.scrollIntoView()}else if(id!=='faq'&&id!=='credits')showOpen(main.querySelector('.guide-accordion'));
+ if(flashReq){flash(flashReq);flashReq=null}
+}
+// After a search result opens a page, its keyword is marked in the item it came from (or anywhere on the page as a fallback);
+// the mark holds 5s, fades over 5s (CSS), then is unwrapped.
+let flashReq=null;
+function flash({phrase,hit,text}){
+ const art=main.querySelector('.article');if(!art)return;
+ const sq=t=>norm(t).replace(/\s+/g,''),whole=sq(text),key=whole.slice(0,24),test=(re,t)=>new RegExp(re,'i').test(t);
+ const hashEl=document.getElementById(location.hash.slice(1));
+ // the rendered block whose text is part of (or starts like) the search item and holds the keyword
+ const item=hashEl?.tagName==='DETAILS'?hashEl:text?[...art.querySelectorAll('h2,h3,h4,p,li,td,th,dt,dd,summary')].find(e=>{const t=sq(e.textContent);return t&&test(hit,e.textContent)&&(whole.includes(t)||t.includes(key))}):null;
+ for(const scope of [item,art]){
+  if(!scope)continue;
+  const re=new RegExp(test(phrase,scope.textContent)?phrase:hit,'gi'),w=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT),nodes=[],marks=[];
+  while(w.nextNode())nodes.push(w.currentNode);
+  for(const n of nodes){
+   if(n.parentElement.closest('svg,mark'))continue;
+   let last=0,frag=null;
+   for(const m of n.data.matchAll(re)){if(!m[0])continue;frag??=document.createDocumentFragment();frag.append(n.data.slice(last,m.index));const k=document.createElement('mark');k.className='flash';k.textContent=m[0];frag.append(k);marks.push(k);last=m.index+m[0].length}
+   if(frag){frag.append(n.data.slice(last));n.replaceWith(frag)}
+  }
+  if(!marks.length)continue;
+  main.querySelectorAll('.guide-accordion.is-open').forEach(d=>{if(!d.contains(marks[0])){d.open=false;d.classList.remove('is-open')}});for(let d=marks[0].closest('details');d;d=d.parentElement.closest('details'))showOpen(d);marks[0].scrollIntoView({block:'center'});
+  marks.forEach(k=>k.addEventListener('animationend',()=>{const p=k.parentNode;k.replaceWith(k.textContent);p?.normalize()},{once:true}));
+  return;
+ }
 }
 // Credits lists are long (hundreds of items), so with no search only a faded preview shows and the guidance below stays in reach.
 const CREDIT_PREVIEW=12;let creditsExpanded=false;
@@ -166,7 +194,7 @@ function renderCredits(isGenre=false){
  // point to the other tab when it has matches the current one doesn't show
  const otherKind=kind==='role'?'instrument':'role',otherLabel=otherKind==='role'?T.roles:T.instruments,otherCount=q?creditMatches(CONTRIBUTORS.filter(x=>x.type===otherKind),q).length:0;
  hint.hidden=!otherCount;
- if(otherCount)hint.innerHTML=`<span>${filtered.length?'':T.tabEmpty+' '}${fill(T.foundIn,{tab:otherLabel,n:otherCount})}</span><button type="button" class="text-link" data-switch="${otherKind==='role'?'Roles':'Instrument'}">${fill(T.viewIn,{tab:otherLabel})}<i class="ph ph-arrow-right" aria-hidden="true"></i></button>`;
+ if(otherCount)hint.innerHTML=`<span>${filtered.length?'':T.tabEmpty+' '}${fill(T.foundIn,{tab:otherLabel,n:otherCount})}</span><button type="button" class="text-link" data-switch="${otherKind==='role'?'Roles':'Instrument'}">${fill(T.viewIn,{tab:otherLabel})}${arrow('right')}</button>`;
  hint.classList.toggle('is-empty',!filtered.length);
  if(otherCount&&!filtered.length)target.innerHTML=''; // the hint already says this tab is empty
  hint.querySelector('[data-switch]')?.addEventListener('click',e=>document.querySelector(`[data-kind="${e.currentTarget.dataset.switch}"]`).click());
@@ -174,9 +202,30 @@ function renderCredits(isGenre=false){
 document.addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;try{await navigator.clipboard.writeText(b.dataset.copy);const ico=b.querySelector('.ph-copy');if(ico){ico.classList.replace('ph-copy','ph-check');setTimeout(()=>ico.classList.replace('ph-check','ph-copy'),1500)}let t=document.createElement('div');t.className='toast';t.setAttribute('role','status');t.textContent=T.copied;document.body.append(t);setTimeout(()=>t.remove(),1800)}catch{alert(T.copyFail)}});
 
 const dialog=document.querySelector('#searchDialog'),input=document.querySelector('#searchInput'),results=document.querySelector('#searchResults');
-function search(){let q=input.value.trim().toLowerCase();if(!q){results.innerHTML=`<div class="hint">${T.enterQuery}</div>`;return}const found=[];for(const f of FAQ_L.flatMap(g=>g.items))if((f.q+' '+faqAnswer(f).map(itemText).join(' ')).toLowerCase().includes(q))found.push({id:f.id,label:T.nav.faq,text:f.q});
- for(const [id,label] of navs){if(id==='home'||id==='faq')continue;for(const item of getItems(id)){const text=itemText(item);if(text.toLowerCase().includes(q))found.push({id,label,text:text.slice(0,130)})}}
- results.innerHTML=found.slice(0,30).map(x=>`<a href="#${x.id}"><b>${esc(x.label)}</b><small>${esc(x.text)}</small></a>`).join('')||`<p class="hint">${T.noResults}</p>`;results.querySelectorAll('a').forEach(a=>a.onclick=()=>{dialog.close();if(a.getAttribute('href')===location.hash)render()})}
+// Search: NFKC (full-width → half-width), case-folded, katakana folded to hiragana; every space-separated word must appear,
+// and a word also matches across a space in the text ("정산시차" finds "정산 시차"). Hits are highlighted in the results.
+const kana=s=>s.replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));
+const norm=s=>kana(s.normalize('NFKC').toLowerCase());
+const charPat=c=>/[ぁ-ゖ]/.test(c)?'['+c+String.fromCharCode(c.charCodeAt(0)+0x60)+']':c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const wordPat=w=>[...w].map(charPat).join('\\s*');
+function search(){
+ const q=norm(input.value).trim();if(!q){results.innerHTML=`<div class="hint">${T.enterQuery}</div>`;return}
+ const words=[...new Set(q.split(/\s+/))],compact=q.replace(/\s+/g,'');
+ const wordRes=words.map(w=>new RegExp(wordPat(w),'i')),compactRe=new RegExp(wordPat(compact),'i');
+ const hitRe=new RegExp([...new Set([compact,...words])].sort((x,y)=>y.length-x.length).map(wordPat).join('|'),'gi');
+ // 0 = no match; whole-phrase and heading/question matches rank first
+ const score=(t,bonus=0)=>{const n=norm(t);return wordRes.every(r=>r.test(n))?1+bonus+(compactRe.test(n)?2:0):0};
+ // when the whole phrase is there, centre on and mark only it (so 'Content ID' doesn't also light up the ID in CID)
+ const phraseRe=new RegExp(wordPat(compact),'gi'),reFor=t=>compactRe.test(norm(t))?phraseRe:hitRe;
+ const snip=t=>{t=t.normalize('NFKC');const re=reFor(t);re.lastIndex=0;const m=re.exec(t),st=m?Math.max(0,m.index-40):0;return (st?'…':'')+t.slice(st,st+130)+(t.length>st+130?'…':'')};
+  const hl=t=>{let out='',last=0;t.replace(reFor(t),(m,i)=>{out+=esc(t.slice(last,i))+`<mark class="hit">${esc(m)}</mark>`;last=i+m.length;return m});return out+esc(t.slice(last))};
+ const found=[];
+ for(const f of FAQ_L.flatMap(g=>g.items)){const ans=faqAnswer(f).map(itemText).join(' '),inQ=score(f.q),sc=inQ?inQ+2:score(ans);if(sc)found.push({id:f.id,text:'',label:T.nav.faq,html:hl(f.q.normalize('NFKC'))+(inQ?'':`<span>${hl(snip(ans))}</span>`),sc})}
+ for(const [id,label] of navs){if(id==='home'||id==='faq')continue;for(const item of getItems(id)){const text=itemText(item),sc=score(text,item.type==='h'?2:0);if(sc)found.push({id,text,label,html:hl(snip(text)),sc})}}
+ found.sort((x,y)=>y.sc-x.sc);
+ results.innerHTML=found.slice(0,30).map(x=>`<a href="#${x.id}"><b>${esc(x.label)}</b><small>${x.html}</small></a>`).join('')||`<p class="hint">${T.noResults}</p>`;
+ const shown=found.slice(0,30);
+ results.querySelectorAll('a').forEach((a,i)=>a.onclick=()=>{flashReq={phrase:phraseRe.source,hit:hitRe.source,text:shown[i].text};dialog.close();if(a.getAttribute('href')===location.hash)render()})}
 const openSearch=()=>{if(!dialog.open){dialog.showModal();input.focus();search()}};
 document.querySelector('#searchButton').onclick=openSearch;document.querySelector('#closeSearch').onclick=()=>dialog.close();
 // dialog has no padding, so only the backdrop targets it; also require the press to start there, so a text drag ending outside doesn't close it
@@ -190,7 +239,7 @@ let previousId=location.hash.slice(1)||'home';
 // Home → topic, as a short loading beat below the header: the tile grows into a frosted veil (blur and tint ease in together)
 // while its icon glides to the centre; the page is swapped only once the veil is at full cover, the icon plays its motion,
 // then the veil eases out. The URL changes on click, so Back during the beat cancels it cleanly.
-const ICON_BIG=56; // the icon is drawn at this size and scaled up from small, never scaled past 1, so it stays sharp
+const ICON_BIG=112; // the icon is drawn at this size and scaled up from small, never scaled past 1, so it stays sharp
 main.addEventListener('click',e=>{
  const a=e.target.closest('.topic-link');if(!a||reduce.matches||e.metaKey||e.ctrlKey||e.shiftKey||e.button)return;
  e.preventDefault();

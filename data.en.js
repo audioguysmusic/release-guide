@@ -1236,6 +1236,64 @@ const DATA_EN = [
    {
     "type": "h",
     "level": 2,
+    "text": "Royalty timing"
+   },
+   {
+    "type": "p",
+    "text": "Revenue from your music passes through several companies before it reaches you, so there is a gap between when your music is played and when it appears on your royalty statement. This is normal across the industry and does not mean anything is missing."
+   },
+   {
+    "type": "ol",
+    "items": [
+     "Your music is streamed or downloaded on platforms (Melon, Genie, Spotify, Apple Music, etc.).",
+     "Each platform totals its monthly figures.",
+     "Distribution partners collect the figures from each platform and report them.",
+     "AUDIOGUY receives the royalty data and sorts it by rights holder.",
+     "We send you a royalty statement. Payouts are made when you request them."
+    ]
+   },
+   {
+    "type": "table",
+    "rows": [
+     [
+      "Category",
+      "Meaning"
+     ],
+     [
+      "Usage period",
+      "When your music was actually played or sold"
+     ],
+     [
+      "Partner reporting period",
+      "The period a distribution partner covered when reporting platform figures"
+     ],
+     [
+      "Date received",
+      "When AUDIOGUY received the royalty data and funds"
+     ],
+     [
+      "Statement date",
+      "When AUDIOGUY sent you the statement"
+     ]
+    ]
+   },
+   {
+    "type": "p",
+    "tone": "note",
+    "text": "Check your statement by the usage period."
+   },
+   {
+    "type": "ul",
+    "items": [
+     "It usually takes a few months for usage to reach a statement, and this varies by platform. Usage from one month may not appear in that month's royalties and can be spread across later statements.",
+     "Platforms report on different cycles, so revenue from the same month can appear at different times depending on the platform.",
+     "Figures reported late are added to the next statement, so one statement can include usage from several months.",
+     "For a new release, Korean platform revenue first appears in the statement for the quarter after release; international revenue may appear later."
+    ]
+   },
+   {
+    "type": "h",
+    "level": 2,
     "text": "Payout terms and schedule"
    },
    {
@@ -1245,7 +1303,7 @@ const DATA_EN = [
    {
     "type": "link",
     "text": "See payout details in the FAQ",
-    "href": "#faq"
+    "href": "#faq-cat-4"
    }
   ]
  }
